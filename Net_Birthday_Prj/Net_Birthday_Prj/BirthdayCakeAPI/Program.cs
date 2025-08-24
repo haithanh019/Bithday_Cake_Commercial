@@ -1,5 +1,6 @@
 using BirthdayCakeAPI.Mapping;
 using BusinessLogic.DTOs.Categories;
+using BusinessLogic.DTOs.Products;
 using BusinessLogic.Entities;
 using BusinessLogic.Services.FacadeService;
 using BusinessLogic.Services.Implements;
@@ -35,6 +36,7 @@ namespace BirthdayCakeAPI
                 var modelBuilder = new ODataConventionModelBuilder();
 
                 modelBuilder.EntitySet<CategoryDTO>("Categories");
+                modelBuilder.EntitySet<ProductDTO>("Products");
                 opt.AddRouteComponents("odata", modelBuilder.GetEdmModel())
                     .Select().Filter().OrderBy().Expand().SetMaxTop(100).Count().SkipToken();
             });

@@ -9,6 +9,7 @@ namespace DataAccess.UnitOfWork
         private readonly ApplicationDbContext _db;
         private readonly IConfiguration _configuration;
         public ICategoryRepository CategoryRepository { get; }
+        public IProductRepository ProductRepository { get; }
 
 
         public UnitOfWork(ApplicationDbContext db, IConfiguration configuration)
@@ -16,6 +17,7 @@ namespace DataAccess.UnitOfWork
             _db = db;
             _configuration = configuration;
             CategoryRepository = new CategoryRepository(_db);
+            ProductRepository = new ProductRepository(_db);
 
         }
 

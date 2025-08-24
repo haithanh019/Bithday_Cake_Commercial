@@ -17,6 +17,7 @@ namespace BusinessLogic.Services.FacadeService
         private readonly IMapper _mapper;
 
         public ICategoryService CategoryService { get; }
+        public IProductService ProductService { get; }
 
         public FacadeService(
             IUnitOfWork unitOfWork,
@@ -30,6 +31,7 @@ namespace BusinessLogic.Services.FacadeService
             _emailQueue = emailQueue;
             _mapper = mapper;
             CategoryService = new CategoryService(_unitOfWork, _mapper);
+            ProductService = new ProductService(_unitOfWork, _mapper);
 
         }
     }
