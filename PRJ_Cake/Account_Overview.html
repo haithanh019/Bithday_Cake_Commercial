@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SweetDay Cakes | Tài khoản</title>
+  <meta name="description" content="Trang tài khoản: hồ sơ, địa chỉ giao hàng, đổi mật khẩu, và lối tắt tới đơn hàng & wishlist." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { fontFamily: { sans: ["Plus Jakarta Sans","system-ui","-apple-system","Segoe UI","Roboto","Noto Sans","sans-serif"] }, colors: { primary: {50:'#EFF8FF',100:'#DBEDFF',200:'#BFE1FF',300:'#93CEFF',400:'#63B6FF',500:'#3BA0FF',600:'#2188EE',700:'#1A73D6',800:'#195CAB',900:'#154C8B'}, cream:'#FFF7F1', choco:'#6B4F4F', strawberry:'#FF6B6B', mint:'#B7F0E3' }, boxShadow:{ soft:'0 10px 25px -10px rgba(30,64,175,.25)'} } } }
+  </script>
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <style>html{scroll-behavior:smooth} :focus-visible{outline:2px solid #3BA0FF; outline-offset:2px}</style>
+</head>
+<body class="bg-primary-50 text-slate-800">
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-primary-100">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <a href="index.html" class="flex items-center gap-2">
+        <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary-100 text-primary-700 shadow-soft"><i data-lucide="user-round" class="w-5 h-5"></i></span>
+        <span class="text-lg font-extrabold text-primary-700">Tài khoản</span>
+      </a>
+      <nav class="flex items-center gap-2">
+        <a href="orders.html" class="p-2 rounded-xl hover:bg-primary-100"><i data-lucide="receipt" class="w-5 h-5"></i></a>
+        <a href="wishlist.html" class="p-2 rounded-xl hover:bg-primary-100"><i data-lucide="heart" class="w-5 h-5"></i></a>
+        <a href="cart.html" class="p-2 rounded-xl hover:bg-primary-100 relative"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span id="cartBadge" class="absolute -top-1 -right-1 text-[10px] bg-primary-600 text-white rounded-full px-1.5 py-0.5 hidden">0</span></a>
+      </nav>
+    </div>
+    <div class="container mx-auto px-4 pb-3 text-sm text-slate-600">
+      <a class="hover:text-primary-700" href="index.html">Trang chủ</a> <span class="mx-1">›</span>
+      <span class="text-slate-500">Tài khoản</span>
+    </div>
+  </header>
+
+  <!-- Guard: if not logged in -->
+  <section id="guard" class="container mx-auto px-4 py-12 hidden">
+    <div class="rounded-3xl border border-primary-200 bg-white p-8 text-center">
+      <i data-lucide="lock" class="w-10 h-10 mx-auto text-primary-600"></i>
+      <h1 class="mt-3 text-2xl font-extrabold text-slate-900">Bạn cần đăng nhập</h1>
+      <p class="mt-1 text-slate-600">Vui lòng đăng nhập để xem trang tài khoản.</p>
+      <a href="auth.html" class="inline-flex items-center gap-2 mt-5 rounded-2xl bg-primary-600 text-white px-5 py-3 font-semibold hover:bg-primary-700"><i data-lucide="log-in" class="w-5 h-5"></i> Đi tới Đăng nhập</a>
+    </div>
+  </section>
+
+  <!-- Main -->
+  <main id="main" class="container mx-auto px-4 py-6 md:py-8 grid lg:grid-cols-12 gap-6 hidden">
+    <!-- Left: Profile card -->
+    <section class="lg:col-span-4">
+      <div class="rounded-3xl border border-primary-200 bg-white p-6">
+        <div class="flex items-center gap-3">
+          <div id="avatar" class="h-14 w-14 rounded-2xl bg-primary-100 text-primary-700 grid place-items-center text-xl font-bold">SD</div>
+          <div>
+            <div id="uName" class="font-extrabold text-slate-900 text-lg">—</div>
+            <div id="uEmail" class="text-sm text-slate-600">—</div>
+            <div id="uPhone" class="text-sm text-slate-600">—</div>
+          </div>
+        </div>
+
+        <div class="mt-4 grid gap-2 text-sm">
+          <a href="orders.html" class="inline-flex items-center gap-2 rounded-2xl bg-white text-primary-700 ring-1 ring-primary-200 px-4 py-2 font-semibold hover:bg-primary-50"><i data-lucide="receipt" class="w-4 h-4"></i> Lịch sử đơn</a>
+          <a href="wishlist.html" class="inline-flex items-center gap-2 rounded-2xl bg-white text-primary-700 ring-1 ring-primary-200 px-4 py-2 font-semibold hover:bg-primary-50"><i data-lucide="heart" class="w-4 h-4"></i> Wishlist</a>
+        </div>
+
+        <div class="mt-4 flex flex-wrap gap-2">
+          <button id="btnLogout" class="inline-flex items-center gap-2 rounded-2xl bg-white text-strawberry ring-1 ring-strawberry/30 px-4 py-2 text-sm font-semibold hover:bg-strawberry/10"><i data-lucide="log-out" class="w-4 h-4"></i> Đăng xuất</button>
+          <button id="btnDelete" class="inline-flex items-center gap-2 rounded-2xl bg-white text-slate-700 ring-1 ring-primary-200 px-4 py-2 text-sm hover:bg-primary-50"><i data-lucide="trash-2" class="w-4 h-4"></i> Xoá tài khoản</button>
+        </div>
+      </div>
+
+      <!-- Quick stats -->
+      <div class="mt-4 grid gap-3">
+        <div class="rounded-3xl border border-primary-200 bg-white p-4 flex items-center justify-between">
+          <div>
+            <div class="text-sm text-slate-500">Đơn hàng</div>
+            <div id="statOrders" class="text-2xl font-extrabold text-primary-700">0</div>
+          </div>
+          <i data-lucide="package" class="w-8 h-8 text-primary-600"></i>
+        </div>
+        <div class="rounded-3xl border border-primary-200 bg-white p-4 flex items-center justify-between">
+          <div>
+            <div class="text-sm text-slate-500">Wishlist</div>
+            <div id="statWish" class="text-2xl font-extrabold text-primary-700">0</div>
+          </div>
+          <i data-lucide="heart" class="w-8 h-8 text-primary-600"></i>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right: Forms -->
+    <section class="lg:col-span-8 grid gap-4">
+      <!-- Profile form -->
+      <div class="rounded-3xl border border-primary-200 bg-white p-6">
+        <h2 class="text-lg font-bold text-slate-900">Hồ sơ</h2>
+        <div class="grid md:grid-cols-2 gap-4 mt-3">
+          <div>
+            <label class="block text-sm font-semibold text-slate-900">Họ tên</label>
+            <input id="fName" type="text" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-900">Số điện thoại</label>
+            <input id="fPhone" type="tel" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-900">Email</label>
+            <input id="fEmail" type="email" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-900">Sinh nhật (tuỳ chọn)</label>
+            <input id="fDob" type="date" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" />
+          </div>
+        </div>
+        <div class="mt-3 flex items-center gap-2">
+          <label class="inline-flex items-center gap-2 text-sm text-slate-700"><input id="fNews" type="checkbox" class="rounded"> Nhận ưu đãi qua email</label>
+          <label class="inline-flex items-center gap-2 text-sm text-slate-700"><input id="fBirthday" type="checkbox" class="rounded"> Nhắc sinh nhật</label>
+        </div>
+        <button id="btnSaveProfile" class="mt-3 inline-flex items-center gap-2 rounded-2xl bg-primary-600 text-white px-5 py-3 text-sm font-semibold hover:bg-primary-700"><i data-lucide="save" class="w-4 h-4"></i> Lưu hồ sơ</button>
+      </div>
+
+      <!-- Address form -->
+      <div class="rounded-3xl border border-primary-200 bg-white p-6">
+        <h2 class="text-lg font-bold text-slate-900">Địa chỉ giao hàng</h2>
+        <div class="grid md:grid-cols-2 gap-4 mt-3">
+          <div class="md:col-span-2">
+            <label class="block text-sm font-semibold text-slate-900">Địa chỉ</label>
+            <input id="aLine" type="text" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" placeholder="Số nhà, đường, phường/xã, quận/huyện" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-900">Quận/Huyện</label>
+            <input id="aDistrict" type="text" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-900">Thành phố</label>
+            <input id="aCity" type="text" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-900">Mã bưu chính</label>
+            <input id="aZip" type="text" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" />
+          </div>
+        </div>
+        <button id="btnSaveAddr" class="mt-3 inline-flex items-center gap-2 rounded-2xl bg-primary-600 text-white px-5 py-3 text-sm font-semibold hover:bg-primary-700"><i data-lucide="save" class="w-4 h-4"></i> Lưu địa chỉ</button>
+      </div>
+
+      <!-- Change password -->
+      <div class="rounded-3xl border border-primary-200 bg-white p-6">
+        <h2 class="text-lg font-bold text-slate-900">Đổi mật khẩu</h2>
+        <div class="grid md:grid-cols-3 gap-4 mt-3">
+          <div>
+            <label class="block text-sm font-semibold text-slate-900">Mật khẩu hiện tại</label>
+            <input id="pCur" type="password" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-900">Mật khẩu mới</label>
+            <input id="pNew" type="password" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" placeholder="Ít nhất 8 ký tự" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-900">Nhập lại mật khẩu</label>
+            <input id="pNew2" type="password" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" />
+          </div>
+        </div>
+        <button id="btnChangePass" class="mt-3 inline-flex items-center gap-2 rounded-2xl bg-white text-primary-700 ring-1 ring-primary-200 px-5 py-3 text-sm font-semibold hover:bg-primary-50"><i data-lucide="key-round" class="w-4 h-4"></i> Cập nhật mật khẩu</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed left-1/2 -translate-x-1/2 bottom-6 z-50 hidden">
+    <div class="rounded-2xl bg-slate-900 text-white px-4 py-3 text-sm shadow-xl flex items-center gap-2">
+      <i data-lucide="check-circle" class="w-4 h-4 text-mint"></i>
+      <span id="toastMsg">Đã lưu</span>
+    </div>
+  </div>
+
+  <script>
+    const $ = (s, r=document)=> r.querySelector(s);
+    const $$ = (s, r=document)=> Array.from(r.querySelectorAll(s));
+    const toast = (m)=>{ $('#toastMsg').textContent=m; $('#toast').classList.remove('hidden'); setTimeout(()=>$('#toast').classList.add('hidden'),1400); };
+
+    const KEY_USER='auth.user', KEY_SESSION='auth.session';
+
+    const store = { get(k){ try{return JSON.parse(localStorage.getItem(k)||'null');}catch{return null;} }, set(k,v){ localStorage.setItem(k, JSON.stringify(v)); } };
+
+    function guard(){
+      const session = store.get(KEY_SESSION); const user = store.get(KEY_USER);
+      if(!session || !user || session.email!==user.email){ $('#guard').classList.remove('hidden'); return null; }
+      $('#main').classList.remove('hidden'); return user;
+    }
+
+    function setBadge(){ const c = JSON.parse(localStorage.getItem('cart')||'[]').length; if(c){ const b=$('#cartBadge'); b.textContent=c; b.classList.remove('hidden'); } }
+
+    function init(){
+      const user = guard(); if(!user){ if(window.lucide) window.lucide.createIcons(); return; }
+      setBadge();
+      fillProfile(user);
+      bindActions(user);
+      if(window.lucide) window.lucide.createIcons();
+    }
+
+    function fillProfile(u){
+      // top card
+      $('#uName').textContent = u.name||'—'; $('#uEmail').textContent = u.email||'—'; $('#uPhone').textContent = u.phone||'—';
+      $('#avatar').textContent = (u.name||'SD').split(' ').map(x=>x[0]).join('').slice(0,2).toUpperCase();
+      // stats
+      $('#statOrders').textContent = (JSON.parse(localStorage.getItem('orders')||'[]').filter(o=> o.customer?.email===u.email).length)||0;
+      $('#statWish').textContent = (JSON.parse(localStorage.getItem('wishlist')||'[]').length)||0;
+      // forms
+      $('#fName').value = u.name||''; $('#fPhone').value = u.phone||''; $('#fEmail').value = u.email||''; $('#fDob').value = u.dob||''; $('#fNews').checked = !!u.newsletter; $('#fBirthday').checked = !!u.birthdayReminder;
+      const a = u.address || {}; $('#aLine').value = a.line||''; $('#aDistrict').value = a.district||''; $('#aCity').value = a.city||''; $('#aZip').value = a.zipcode||'';
+    }
+
+    function validatePhone(v){ return /^0\d{9,10}$/.test((v||'').trim()); }
+
+    function bindActions(u){
+      $('#btnSaveProfile').addEventListener('click', ()=>{
+        const nu = { ...u, name: $('#fName').value.trim(), phone: $('#fPhone').value.trim(), email: $('#fEmail').value.trim().toLowerCase(), dob: $('#fDob').value, newsletter: $('#fNews').checked, birthdayReminder: $('#fBirthday').checked };
+        if(nu.phone && !validatePhone(nu.phone)) { toast('SĐT không hợp lệ'); return; }
+        // Keep session if email changed
+        const sess = store.get(KEY_SESSION); if(sess && sess.email===u.email) { sess.email = nu.email; store.set(KEY_SESSION, sess); }
+        store.set(KEY_USER, nu); toast('Đã lưu hồ sơ'); fillProfile(nu);
+      });
+
+      $('#btnSaveAddr').addEventListener('click', ()=>{
+        const addr = { line: $('#aLine').value.trim(), district: $('#aDistrict').value.trim(), city: $('#aCity').value.trim(), zipcode: $('#aZip').value.trim() };
+        const nu = { ...store.get(KEY_USER), address: addr }; store.set(KEY_USER, nu); toast('Đã lưu địa chỉ');
+      });
+
+      $('#btnChangePass').addEventListener('click', ()=>{
+        const cur=$('#pCur').value, n1=$('#pNew').value, n2=$('#pNew2').value; if(!cur||!n1||!n2){ toast('Vui lòng điền đủ các trường'); return; }
+        const user = store.get(KEY_USER); if(user.pass!==cur){ toast('Mật khẩu hiện tại không đúng'); return; }
+        if(n1.length<8){ toast('Mật khẩu mới tối thiểu 8 ký tự'); return; }
+        if(n1!==n2){ toast('Xác nhận mật khẩu chưa khớp'); return; }
+        user.pass=n1; store.set(KEY_USER,user); $('#pCur').value=''; $('#pNew').value=''; $('#pNew2').value=''; toast('Đã cập nhật mật khẩu');
+      });
+
+      $('#btnLogout').addEventListener('click', ()=>{ localStorage.removeItem(KEY_SESSION); location.href='auth.html'; });
+      $('#btnDelete').addEventListener('click', ()=>{ if(confirm('Xoá tài khoản sẽ mất dữ liệu đã lưu trên trình duyệt. Tiếp tục?')){ localStorage.removeItem(KEY_USER); localStorage.removeItem(KEY_SESSION); location.href='auth.html'; }});
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

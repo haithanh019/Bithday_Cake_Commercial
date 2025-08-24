@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SweetDay Cakes | Checkout</title>
+  <meta name="description" content="Thanh toán: thông tin liên hệ, địa chỉ giao hàng, thời gian giao, phương thức thanh toán và xác nhận đơn hàng." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { fontFamily: { sans: ["Plus Jakarta Sans","system-ui","-apple-system","Segoe UI","Roboto","Noto Sans","sans-serif"] }, colors: { primary: {50:'#EFF8FF',100:'#DBEDFF',200:'#BFE1FF',300:'#93CEFF',400:'#63B6FF',500:'#3BA0FF',600:'#2188EE',700:'#1A73D6',800:'#195CAB',900:'#154C8B'}, cream:'#FFF7F1', choco:'#6B4F4F', strawberry:'#FF6B6B', mint:'#B7F0E3' }, boxShadow:{ soft:'0 10px 25px -10px rgba(30,64,175,.25)'} } } }
+  </script>
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <style>html{scroll-behavior:smooth} :focus-visible{outline:2px solid #3BA0FF; outline-offset:2px}</style>
+</head>
+<body class="bg-primary-50 text-slate-800">
+  <!-- Announcement -->
+  <div class="bg-primary-600 text-white text-sm">
+    <div class="container mx-auto px-4 py-2 flex items-center justify-between">
+      <p class="truncate">🔒 Thanh toán an toàn • Giao nhanh 2–4 giờ nội thành</p>
+      <a href="cart.html" class="underline hidden sm:block">Quay lại giỏ hàng</a>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-primary-100">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <a href="index.html" class="flex items-center gap-2">
+        <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary-100 text-primary-700 shadow-soft"><i data-lucide="cake" class="w-5 h-5"></i></span>
+        <span class="text-lg font-extrabold text-primary-700">SweetDay</span>
+      </a>
+      <nav class="flex items-center gap-2">
+        <a href="shop.html" class="p-2 rounded-xl hover:bg-primary-100"><i data-lucide="store" class="w-5 h-5"></i></a>
+        <a href="cart.html" class="p-2 rounded-xl hover:bg-primary-100 relative"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span id="cartBadge" class="absolute -top-1 -right-1 text-[10px] bg-primary-600 text-white rounded-full px-1.5 py-0.5 hidden">0</span></a>
+      </nav>
+    </div>
+    <div class="container mx-auto px-4 pb-3 text-sm text-slate-600">
+      <a class="hover:text-primary-700" href="index.html">Trang chủ</a> <span class="mx-1">›</span>
+      <a class="hover:text-primary-700" href="cart.html">Giỏ hàng</a> <span class="mx-1">›</span>
+      <span class="text-slate-500">Thanh toán</span>
+    </div>
+  </header>
+
+  <!-- Empty state -->
+  <section id="empty" class="container mx-auto px-4 py-16 hidden">
+    <div class="rounded-3xl border border-primary-200 bg-white p-8 text-center">
+      <i data-lucide="shopping-bag" class="w-10 h-10 mx-auto text-primary-600"></i>
+      <h1 class="mt-3 text-2xl font-extrabold text-slate-900">Chưa có sản phẩm để thanh toán</h1>
+      <p class="mt-1 text-slate-600">Vui lòng thêm sản phẩm vào giỏ hàng.</p>
+      <a href="shop.html" class="inline-flex items-center gap-2 mt-5 rounded-2xl bg-primary-600 text-white px-5 py-3 font-semibold hover:bg-primary-700">Mua sắm ngay</a>
+    </div>
+  </section>
+
+  <!-- Checkout -->
+  <main id="checkoutMain" class="container mx-auto px-4 py-6 md:py-8 grid lg:grid-cols-12 gap-6 hidden">
+    <!-- Form -->
+    <section class="lg:col-span-7">
+      <div class="rounded-3xl border border-primary-200 bg-white p-4 md:p-6">
+        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900">Thông tin giao hàng</h1>
+
+        <!-- Contact -->
+        <div class="mt-5 grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-900">Họ và tên *</label>
+            <input id="name" type="text" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" required />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-900">Số điện thoại *</label>
+            <input id="phone" type="tel" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" placeholder="09xx xxx xxx" required />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-900">Email</label>
+            <input id="email" type="email" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" placeholder="you@example.com" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-900">Ghi chú cho thợ bánh</label>
+            <input id="note" type="text" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" placeholder="VD: viết chữ màu xanh, ít ngọt…" />
+          </div>
+        </div>
+
+        <!-- Address -->
+        <div class="mt-5">
+          <label class="block text-sm font-semibold text-slate-900">Địa chỉ giao hàng *</label>
+          <input id="address" type="text" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" placeholder="Số nhà, đường, phường/xã, quận/huyện, TP" required />
+          <div class="mt-2 grid md:grid-cols-3 gap-3 text-sm">
+            <input id="district" type="text" class="rounded-2xl border border-primary-200 px-4 py-3" placeholder="Quận/Huyện" />
+            <input id="city" type="text" class="rounded-2xl border border-primary-200 px-4 py-3" placeholder="Tỉnh/Thành phố" />
+            <input id="zipcode" type="text" class="rounded-2xl border border-primary-200 px-4 py-3" placeholder="Mã bưu chính (tuỳ chọn)" />
+          </div>
+        </div>
+
+        <!-- Delivery time -->
+        <div class="mt-5 grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-900">Ngày giao</label>
+            <input id="date" type="date" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-900">Giờ giao</label>
+            <select id="time" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm"></select>
+          </div>
+        </div>
+
+        <!-- Payment -->
+        <div class="mt-6">
+          <h2 class="text-lg font-bold text-slate-900">Phương thức thanh toán</h2>
+          <div class="mt-3 grid gap-2">
+            <label class="flex items-center justify-between gap-3 rounded-2xl ring-1 ring-primary-200 bg-white px-3 py-2">
+              <span class="text-sm"><input type="radio" name="pm" value="cod" class="mr-2" checked> Thanh toán khi nhận hàng (COD)</span>
+              <i data-lucide="truck" class="w-4 h-4 text-primary-600"></i>
+            </label>
+            <label class="flex items-center justify-between gap-3 rounded-2xl ring-1 ring-primary-200 bg-white px-3 py-2">
+              <span class="text-sm"><input type="radio" name="pm" value="bank" class="mr-2"> Chuyển khoản ngân hàng</span>
+              <i data-lucide="banknote" class="w-4 h-4 text-primary-600"></i>
+            </label>
+            <label class="flex items-center justify-between gap-3 rounded-2xl ring-1 ring-primary-200 bg-white px-3 py-2 opacity-60">
+              <span class="text-sm"><input type="radio" name="pm" value="online" class="mr-2" disabled> Thẻ/QR Online (sắp ra mắt)</span>
+              <i data-lucide="credit-card" class="w-4 h-4 text-primary-600"></i>
+            </label>
+          </div>
+          <div id="pmDetail" class="mt-3 hidden text-sm text-slate-700 rounded-2xl bg-primary-50 p-3"></div>
+        </div>
+
+        <!-- Agree -->
+        <div class="mt-6 text-sm text-slate-700">
+          <label class="inline-flex items-center gap-2"><input id="agree" type="checkbox" class="rounded"> Tôi đã đọc và đồng ý với <a href="#" class="text-primary-700 underline">Điều khoản & Chính sách</a>.</label>
+        </div>
+
+        <!-- Place order -->
+        <div class="mt-6 flex items-center gap-3">
+          <button id="place" class="inline-flex items-center gap-2 rounded-2xl bg-primary-600 text-white px-5 py-3 font-semibold hover:bg-primary-700"><i data-lucide="check-circle2" class="w-5 h-5"></i> Đặt hàng</button>
+          <a href="cart.html" class="inline-flex items-center gap-2 rounded-2xl bg-white text-primary-700 ring-1 ring-primary-200 px-5 py-3 font-semibold hover:bg-primary-50">Quay lại giỏ</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Summary -->
+    <aside class="lg:col-span-5">
+      <div class="rounded-3xl border border-primary-200 bg-white p-4 md:p-6">
+        <h3 class="text-lg font-bold text-slate-900">Đơn hàng của bạn</h3>
+        <div id="summaryItems" class="mt-3 space-y-3"></div>
+        <div class="mt-4 space-y-2 text-sm">
+          <div class="flex justify-between"><span>Tạm tính</span><span id="subtotal">0₫</span></div>
+          <div class="flex justify-between"><span>Giảm giá</span><span id="discount">-0₫</span></div>
+          <div class="flex justify-between"><span>Phí giao hàng</span><span id="shipping">0₫</span></div>
+          <div class="pt-2 border-t border-primary-200 flex justify-between font-extrabold text-slate-900"><span>Thành tiền</span><span id="total">0₫</span></div>
+        </div>
+      </div>
+
+      <div class="mt-4 rounded-3xl border border-primary-200 bg-white p-4 text-sm text-slate-700">
+        <div class="flex items-center gap-2"><i data-lucide="clock" class="w-5 h-5 text-primary-600"></i><div><strong>Gợi ý đặt sớm:</strong> Thiết kế phức tạp nên đặt trước 24–48h.</div></div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed left-1/2 -translate-x-1/2 bottom-6 z-50 hidden">
+    <div class="rounded-2xl bg-slate-900 text-white px-4 py-3 text-sm shadow-xl flex items-center gap-2">
+      <i data-lucide="info" class="w-4 h-4 text-mint"></i>
+      <span id="toastMsg">Thông báo</span>
+    </div>
+  </div>
+
+  <template id="tpl-item">
+    <div class="flex items-center gap-3">
+      <img class="w-14 h-14 object-cover rounded-xl ring-1 ring-primary-200" alt="Ảnh"/>
+      <div class="flex-1">
+        <div class="text-sm font-semibold text-slate-900" data-name></div>
+        <div class="text-xs text-slate-500" data-meta></div>
+      </div>
+      <div class="text-right text-sm">
+        <div class="font-bold text-primary-700" data-price></div>
+        <div class="text-xs text-slate-500" data-qty></div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    const $ = (s, r=document)=> r.querySelector(s);
+    const $$ = (s, r=document)=> Array.from(r.querySelectorAll(s));
+    const fmt = n => new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(n);
+    const toast = (m)=>{ $('#toastMsg').textContent=m; $('#toast').classList.remove('hidden'); setTimeout(()=>$('#toast').classList.add('hidden'),1500); };
+
+    const store = { get(k){ try{return JSON.parse(localStorage.getItem(k)||'[]');}catch{return [];} }, set(k,v){ localStorage.setItem(k, JSON.stringify(v)); } };
+
+    const COUPONS = { 'HAPPY10': { type:'percent', value:10, min:200000 }, 'FREESHIP': { type:'shipping', value:1, min:350000 } };
+
+    function computeShipping(subtotal, coupon){
+      const base = subtotal >= 350000 ? 0 : 20000;
+      if(coupon && COUPONS[coupon]?.type==='shipping' && subtotal >= (COUPONS[coupon].min||0)) return 0;
+      return base;
+    }
+
+    function linePrice(item){
+      let price = 0;
+      if(item.price) price = item.price; else if(item.name && item.size){
+        const sizeMap = { 's05':1, '0.5kg':1, 's1':1.35, '1kg':1.35, 's2':2.2, '2kg':2.2 };
+        const base = 280000; price = Math.round(base * (sizeMap[item.size] || 1));
+        if(item.vegan) price += 20000; if(item.gf) price += 15000;
+      } else price = 300000;
+      return price * (item.qty||1);
+    }
+
+    const state = { cart:[], coupon: localStorage.getItem('appliedCoupon')||'', subtotal:0, discount:0, shipping:0, total:0 };
+
+    function init(){
+      state.cart = store.get('cart');
+      if((state.cart||[]).length===0){ $('#empty').classList.remove('hidden'); $('#checkoutMain').classList.add('hidden'); return; }
+      $('#empty').classList.add('hidden'); $('#checkoutMain').classList.remove('hidden');
+
+      renderTimes();
+      renderSummary();
+      renderItems();
+      restoreBadge();
+
+      // Payment detail
+      $$('input[name="pm"]').forEach(r=> r.addEventListener('change', showPMDetail));
+      showPMDetail();
+
+      $('#place').addEventListener('click', placeOrder);
+      if(window.lucide) window.lucide.createIcons();
+    }
+
+    function restoreBadge(){ const c=store.get('cart').length; if(c){ const b=$('#cartBadge'); b.textContent=c; b.classList.remove('hidden'); } }
+
+    function renderTimes(){
+      const sel = $('#time'); sel.innerHTML='';
+      for(let h=9; h<=20; h++){ for(let m=0;m<60;m+=30){ const v=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`; const o=document.createElement('option'); o.value=v; o.textContent=v; sel.appendChild(o);} }
+      const today = new Date(); const yyyy=today.getFullYear(); const mm=String(today.getMonth()+1).padStart(2,'0'); const dd=String(today.getDate()).padStart(2,'0');
+      $('#date').value = `${yyyy}-${mm}-${dd}`;
+    }
+
+    function renderItems(){
+      const wrap = $('#summaryItems'); wrap.innerHTML='';
+      const tpl = $('#tpl-item');
+      state.cart.forEach(it=>{
+        const node = tpl.content.cloneNode(true);
+        const img = node.querySelector('img'); img.src = it.img || 'https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=800&auto=format&fit=crop'; img.alt = it.name||'Bánh';
+        node.querySelector('[data-name]').textContent = it.name || (it.type==='custom' ? 'Bánh thiết kế theo yêu cầu' : 'Bánh sinh nhật');
+        const meta = [];
+        if(it.size) meta.push(typeof it.size==='string' && it.size.startsWith('s')? (it.size==='s05'?'0.5kg': it.size==='s1'?'1kg':'2kg') : it.size);
+        if(it.flavor) meta.push(it.flavor==='vietquat'?'Việt quất': it.flavor==='dau'?'Dâu': it.flavor==='matcha'?'Matcha': it.flavor);
+        if(it.vegan) meta.push('Vegan'); if(it.gf) meta.push('Không gluten');
+        if(it.msg) meta.push(`"${it.msg}"`);
+        node.querySelector('[data-meta]').textContent = meta.join(' • ');
+        node.querySelector('[data-price]').textContent = fmt(linePrice(it));
+        node.querySelector('[data-qty]').textContent = `x${it.qty||1}`;
+        wrap.appendChild(node);
+      });
+    }
+
+    function renderSummary(){
+      state.subtotal = state.cart.reduce((s,it)=> s + linePrice(it), 0);
+      let disc = 0; const code = (state.coupon||'').toUpperCase(); const c = COUPONS[code];
+      if(c && c.type==='percent' && state.subtotal>=(c.min||0)) disc = Math.round(state.subtotal*(c.value/100));
+      state.discount = disc; $('#subtotal').textContent = fmt(state.subtotal); $('#discount').textContent = '-' + fmt(disc);
+      state.shipping = computeShipping(state.subtotal - disc, code); $('#shipping').textContent = state.shipping===0? '0₫' : fmt(state.shipping);
+      state.total = Math.max(0, state.subtotal - disc + state.shipping); $('#total').textContent = fmt(state.total);
+    }
+
+    function showPMDetail(){
+      const val = $$('input[name="pm"]').find(r=>r.checked)?.value;
+      const box = $('#pmDetail');
+      if(val==='bank'){
+        box.innerHTML = '<strong>Chuyển khoản:</strong> MB Bank • STK <b>123456789</b> • Chủ TK <b>SweetDay Cakes</b>. Nội dung: <i>SD-[SĐT]-[Mã đơn]</i>. Ảnh hoá đơn sẽ được gửi qua email/sms.';
+        box.classList.remove('hidden');
+      } else if(val==='cod'){
+        box.innerHTML = 'Thanh toán tiền mặt khi nhận hàng. Vui lòng chuẩn bị số tiền gần đúng.';
+        box.classList.remove('hidden');
+      } else { box.classList.add('hidden'); }
+    }
+
+    function validateForm(){
+      const name=$('#name').value.trim(), phone=$('#phone').value.trim(), address=$('#address').value.trim();
+      if(!name || !phone || !address){ toast('Vui lòng nhập đầy đủ Họ tên, Số điện thoại và Địa chỉ'); return false; }
+      if(!/^0\d{9,10}$/.test(phone)){ toast('SĐT không hợp lệ'); return false; }
+      if(!$('#agree').checked){ toast('Vui lòng đồng ý Điều khoản & Chính sách'); return false; }
+      return true;
+    }
+
+    function genOrderId(){
+      const d = new Date(); const y = d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const day=String(d.getDate()).padStart(2,'0');
+      const rand = Math.floor(Math.random()*9000)+1000; return `SD-${y}${m}${day}-${rand}`;
+    }
+
+    function placeOrder(){
+      if(!validateForm()) return;
+      const orderId = genOrderId();
+      const order = {
+        id: orderId,
+        createdAt: new Date().toISOString(),
+        items: state.cart,
+        amounts: { subtotal: state.subtotal, discount: state.discount, shipping: state.shipping, total: state.total },
+        coupon: state.coupon || null,
+        customer: { name: $('#name').value.trim(), phone: $('#phone').value.trim(), email: $('#email').value.trim()||null },
+        address: { line: $('#address').value.trim(), district: $('#district').value.trim(), city: $('#city').value.trim(), zipcode: $('#zipcode').value.trim() },
+        delivery: { date: $('#date').value, time: $('#time').value },
+        note: $('#note').value.trim(),
+        payment: $$('input[name="pm"]').find(r=>r.checked)?.value || 'cod',
+        status: 'Processing'
+      };
+      // Persist
+      const orders = JSON.parse(localStorage.getItem('orders')||'[]'); orders.push(order); localStorage.setItem('orders', JSON.stringify(orders));
+      // Clear cart & coupon
+      localStorage.removeItem('cart'); localStorage.removeItem('appliedCoupon');
+      // Redirect to success (placeholder page)
+      window.location.href = `order-success.html?id=${encodeURIComponent(orderId)}`;
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

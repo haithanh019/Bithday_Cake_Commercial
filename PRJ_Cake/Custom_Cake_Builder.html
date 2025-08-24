@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SweetDay Cakes | Custom Cake Builder</title>
+  <meta name="description" content="Tự thiết kế bánh sinh nhật: chọn cốt bánh, kem, kích thước, màu, topping, lời chúc, thời gian giao và ước tính giá theo lựa chọn." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Plus Jakarta Sans","system-ui","-apple-system","Segoe UI","Roboto","Noto Sans","sans-serif"] },
+          colors: { primary: {50:'#EFF8FF',100:'#DBEDFF',200:'#BFE1FF',300:'#93CEFF',400:'#63B6FF',500:'#3BA0FF',600:'#2188EE',700:'#1A73D6',800:'#195CAB',900:'#154C8B'}, cream:'#FFF7F1', choco:'#6B4F4F', strawberry:'#FF6B6B', mint:'#B7F0E3' },
+          boxShadow:{ soft:'0 10px 25px -10px rgba(30,64,175,.25)'}
+        }
+      }
+    }
+  </script>
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <style>html{scroll-behavior:smooth} :focus-visible{outline:2px solid #3BA0FF; outline-offset:2px}</style>
+</head>
+<body class="bg-primary-50 text-slate-800">
+  <!-- Announcement -->
+  <div class="bg-primary-600 text-white text-sm">
+    <div class="container mx-auto px-4 py-2 flex items-center justify-between">
+      <p class="truncate">✨ Builder: Tạo bánh theo ý trong 1 phút – hệ thống tự ước tính giá</p>
+      <a href="#faq" class="underline hidden sm:block">Câu hỏi thường gặp</a>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-primary-100">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <a href="index.html" class="flex items-center gap-2">
+        <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary-100 text-primary-700 shadow-soft"><i data-lucide="wand-2" class="w-5 h-5"></i></span>
+        <span class="text-lg font-extrabold text-primary-700">Custom Cake</span>
+      </a>
+      <nav class="flex items-center gap-2">
+        <a href="shop.html" class="p-2 rounded-xl hover:bg-primary-100"><i data-lucide="store" class="w-5 h-5"></i></a>
+        <a href="#" class="p-2 rounded-xl hover:bg-primary-100 relative"><i data-lucide="heart" class="w-5 h-5"></i><span id="wishlistBadge" class="absolute -top-1 -right-1 text-[10px] bg-strawberry text-white rounded-full px-1.5 py-0.5 hidden">0</span></a>
+        <a href="#" class="p-2 rounded-xl hover:bg-primary-100 relative"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span id="cartBadge" class="absolute -top-1 -right-1 text-[10px] bg-primary-600 text-white rounded-full px-1.5 py-0.5 hidden">0</span></a>
+      </nav>
+    </div>
+    <div class="container mx-auto px-4 pb-3 text-sm text-slate-600">
+      <a class="hover:text-primary-700" href="index.html">Trang chủ</a> <span class="mx-1">›</span> <span class="text-slate-500">Custom Cake Builder</span>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="container mx-auto px-4 py-6 md:py-8 grid lg:grid-cols-12 gap-6">
+    <!-- Preview panel -->
+    <section class="lg:col-span-5">
+      <div class="rounded-3xl border border-primary-200 bg-white p-4 md:p-6">
+        <div class="relative">
+          <!-- Visual preview: simple SVG cake that changes by options -->
+          <div class="w-full aspect-square bg-primary-50 rounded-2xl grid place-items-center">
+            <svg id="cakeSVG" viewBox="0 0 320 320" class="w-[80%] drop-shadow">
+              <!-- Plate -->
+              <ellipse cx="160" cy="250" rx="120" ry="16" fill="#DBEDFF"/>
+              <!-- Cake body -->
+              <rect id="cakeBody" x="70" y="120" width="180" height="100" rx="16" fill="#BFE1FF" stroke="#93CEFF" stroke-width="4"/>
+              <!-- Layer stripe (filling) -->
+              <rect id="cakeStripe" x="70" y="160" width="180" height="18" fill="#FFF7F1"/>
+              <!-- Frosting drip -->
+              <path id="frosting" d="M70 120 h180 v22 q-10 10 -20 0 t-20 0 t-20 0 t-20 0 t-20 0 t-20 0 t-20 0 v-22z" fill="#93CEFF"/>
+              <!-- Candle -->
+              <rect id="candle" x="156" y="70" width="8" height="40" rx="4" fill="#FF6B6B"/>
+              <path id="flame" d="M160 60 q10 10 0 20 q-10 -10 0 -20z" fill="#FDBA74"/>
+              <!-- Message -->
+              <text id="msgText" x="160" y="210" text-anchor="middle" font-size="14" font-weight="700" fill="#154C8B">HAPPY DAY</text>
+            </svg>
+          </div>
+          <button id="resetBtn" class="absolute top-3 right-3 p-2 rounded-xl bg-white/90 hover:bg-white shadow"><i data-lucide="refresh-ccw" class="w-5 h-5"></i></button>
+        </div>
+
+        <!-- Price card -->
+        <div class="mt-4 rounded-2xl border border-primary-200 bg-primary-50 p-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-xs text-slate-500">Tạm tính</div>
+              <div id="price" class="text-2xl font-extrabold text-primary-700">0₫</div>
+            </div>
+            <div class="text-sm text-slate-600">
+              <div><span id="weightLabel"></span> • <span id="servingLabel"></span></div>
+              <div id="dietLabel" class="text-xs"></div>
+            </div>
+          </div>
+          <div class="mt-3 text-xs text-slate-500">* Giá đã gồm hộp bánh. Phụ thu có thể thay đổi theo thiết kế phức tạp.</div>
+        </div>
+      </div>
+
+      <!-- Delivery -->
+      <div class="mt-4 rounded-3xl border border-primary-200 bg-white p-4">
+        <h3 class="font-semibold text-slate-900 mb-2">Thời gian giao</h3>
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-sm text-slate-700">Ngày giao</label>
+            <input id="date" type="date" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm"/>
+          </div>
+          <div>
+            <label class="block text-sm text-slate-700">Giờ giao</label>
+            <select id="time" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm"></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4 flex flex-wrap gap-3">
+        <button id="addToCart" class="inline-flex items-center gap-2 rounded-2xl bg-primary-600 text-white px-5 py-3 font-semibold hover:bg-primary-700"><i data-lucide="shopping-cart" class="w-5 h-5"></i> Thêm vào giỏ</button>
+        <button id="savePreset" class="inline-flex items-center gap-2 rounded-2xl bg-white text-primary-700 ring-1 ring-primary-200 px-5 py-3 font-semibold hover:bg-primary-50"><i data-lucide="save" class="w-5 h-5"></i> Lưu cấu hình</button>
+      </div>
+    </section>
+
+    <!-- Builder form -->
+    <section class="lg:col-span-7">
+      <div class="rounded-3xl border border-primary-200 bg-white p-4 md:p-6">
+        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900">Tạo bánh theo ý</h1>
+        <p class="mt-1 text-slate-600">Chọn các tuỳ chọn dưới đây. Giá sẽ cập nhật ngay.</p>
+
+        <!-- Size -->
+        <div class="mt-5">
+          <label class="block text-sm font-semibold text-slate-900 mb-2">Kích thước</label>
+          <div id="sizeGroup" class="flex flex-wrap gap-2"></div>
+          <div class="mt-1 text-xs text-slate-500">0.5kg (2–4 người) • 1kg (6–10 người) • 2kg (10–16 người)</div>
+        </div>
+
+        <!-- Shape -->
+        <div class="mt-5">
+          <label class="block text-sm font-semibold text-slate-900 mb-2">Hình dạng</label>
+          <div id="shapeGroup" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <!-- Sponge & Frosting -->
+        <div class="mt-5 grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-900 mb-2">Cốt bánh (Sponge)</label>
+            <div id="spongeGroup" class="flex flex-wrap gap-2"></div>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-900 mb-2">Kem phủ (Frosting)</label>
+            <div id="frostingGroup" class="flex flex-wrap gap-2"></div>
+          </div>
+        </div>
+
+        <!-- Color & Theme -->
+        <div class="mt-5 grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-900 mb-2">Màu chủ đạo</label>
+            <div id="colorGroup" class="flex flex-wrap gap-2"></div>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-900 mb-2">Chủ đề</label>
+            <div id="themeGroup" class="flex flex-wrap gap-2"></div>
+          </div>
+        </div>
+
+        <!-- Fillings & Toppings -->
+        <div class="mt-5 grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-900 mb-2">Nhân (chọn 1)</label>
+            <div id="fillingGroup" class="flex flex-col gap-2"></div>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-900 mb-2">Topping (chọn nhiều)</label>
+            <div id="toppingGroup" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
+          </div>
+        </div>
+
+        <!-- Message & Extras -->
+        <div class="mt-5 grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-900">Lời chúc (tối đa 30 ký tự)</label>
+            <input id="msg" maxlength="30" type="text" placeholder="VD: Happy Birthday Ben!" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" />
+            <div class="mt-1 text-xs text-slate-500">Xem trước trên bánh ở khung trái.</div>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-900">Phụ kiện</label>
+            <div class="mt-1 grid grid-cols-2 gap-2 text-sm">
+              <label class="inline-flex items-center gap-2"><input type="checkbox" id="optCandle" class="rounded"> 10 nến (+5.000₫)</label>
+              <label class="inline-flex items-center gap-2"><input type="checkbox" id="optCard" class="rounded"> Thiệp viết tay (+0₫)</label>
+              <label class="inline-flex items-center gap-2"><input type="checkbox" id="optSparkle" class="rounded"> Pháo kim tuyến (+10.000₫)</label>
+              <label class="inline-flex items-center gap-2"><input type="checkbox" id="optKnife" class="rounded"> Dao cắt bánh (+3.000₫)</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dietary options -->
+        <div class="mt-5 grid md:grid-cols-2 gap-4">
+          <label class="inline-flex items-center gap-2 text-sm text-slate-700"><input id="optVegan" type="checkbox" class="rounded"> Vegan (+20.000₫)</label>
+          <label class="inline-flex items-center gap-2 text-sm text-slate-700"><input id="optGF" type="checkbox" class="rounded"> Không gluten (+15.000₫)</label>
+        </div>
+
+        <!-- Upload reference (optional) -->
+        <div class="mt-5">
+          <label class="block text-sm font-semibold text-slate-900">Ảnh tham khảo (tuỳ chọn)</label>
+          <input id="refImg" type="file" accept="image/*" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm bg-white" />
+          <div id="refPreview" class="mt-2 hidden">
+            <img id="refImgTag" class="w-full max-h-60 object-cover rounded-xl ring-1 ring-primary-200" alt="Ảnh tham khảo" />
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ small -->
+      <div id="faq" class="mt-4 rounded-3xl border border-primary-200 bg-white p-4">
+        <h3 class="font-semibold text-slate-900 mb-2">FAQ nhanh</h3>
+        <ul class="text-sm text-slate-700 list-disc pl-4 space-y-1">
+          <li>Thiết kế phức tạp có thể cần đặt trước 24–48h.</li>
+          <li>Vegan/Không gluten làm riêng khu vực, tránh lẫn chéo.</li>
+          <li>Hỗ trợ viết chữ tiếng Việt có dấu & tiếng Anh.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-top border-primary-200 bg-white">
+    <div class="container mx-auto px-4 py-8 text-sm text-slate-600 flex flex-wrap items-center justify-between gap-3">
+      <div>© 2025 SweetDay Cakes</div>
+      <div class="flex items-center gap-3">
+        <a class="hover:text-primary-700" href="#">Giao hàng</a>
+        <a class="hover:text-primary-700" href="#">Đổi trả</a>
+        <a class="hover:text-primary-700" href="#">Bảo mật</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed left-1/2 -translate-x-1/2 bottom-6 z-50 hidden">
+    <div class="rounded-2xl bg-slate-900 text-white px-4 py-3 text-sm shadow-xl flex items-center gap-2">
+      <i data-lucide="check-circle" class="w-4 h-4 text-mint"></i>
+      <span id="toastMsg">Đã thêm vào giỏ</span>
+    </div>
+  </div>
+
+  <script>
+    const $ = (s, r=document)=> r.querySelector(s);
+    const $$ = (s, r=document)=> Array.from(r.querySelectorAll(s));
+    const fmt = n => new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(n);
+    const toast = (m)=>{ $('#toastMsg').textContent=m; $('#toast').classList.remove('hidden'); setTimeout(()=>$('#toast').classList.add('hidden'),1600); };
+
+    const store = { get(k){ try{ return JSON.parse(localStorage.getItem(k)||'[]'); }catch{ return []; } }, set(k,v){ localStorage.setItem(k, JSON.stringify(v)); }, add(k,item){ const a=this.get(k); a.push(item); this.set(k,a); return a.length; } };
+
+    // Option data & pricing
+    const DATA = {
+      sizes:[
+        {id:'s05', label:'0.5kg', price: 240000, servings:'2–4'},
+        {id:'s1', label:'1kg', price: 340000, servings:'6–10'},
+        {id:'s2', label:'2kg', price: 520000, servings:'10–16'}
+      ],
+      shapes:[
+        {id:'round', label:'Tròn', multiplier:1, svg:{bodyRx:16}},
+        {id:'square', label:'Vuông', multiplier:1, svg:{bodyRx:8}},
+        {id:'heart', label:'Trái tim', multiplier:1.12, svg:'heart'}
+      ],
+      sponges:[
+        {id:'vanilla', label:'Vanilla', add:0},
+        {id:'choco', label:'Chocolate', add:15000},
+        {id:'redvelvet', label:'Red Velvet', add:25000}
+      ],
+      frostings:[
+        {id:'whip', label:'Whipping cream', add:0, color:'#F3F4F6'},
+        {id:'creamcheese', label:'Cream cheese', add:20000, color:'#FFF7F1'},
+        {id:'buttercream', label:'Buttercream', add:15000, color:'#FDF2F8'}
+      ],
+      colors:[
+        {id:'blue', label:'Xanh dương nhạt', hexBody:'#BFE1FF', hexFrost:'#93CEFF'},
+        {id:'pink', label:'Hồng phấn', hexBody:'#FFE0F0', hexFrost:'#FFB3D6'},
+        {id:'cream', label:'Màu kem', hexBody:'#FFF1E6', hexFrost:'#FFE1C9'},
+        {id:'mint', label:'Xanh mint', hexBody:'#CFFAE8', hexFrost:'#A7F3D0'}
+      ],
+      fillings:[
+        {id:'vietquat', label:'Việt quất', add:10000},
+        {id:'dau', label:'Dâu', add:10000},
+        {id:'matcha', label:'Matcha', add:15000}
+      ],
+      toppings:[
+        {id:'fruit', label:'Trái cây tươi', add:20000},
+        {id:'choco', label:'Socola chip', add:10000},
+        {id:'macaron', label:'Macaron (2 chiếc)', add:25000},
+        {id:'sprinkle', label:'Rắc màu', add:5000},
+        {id:'flower', label:'Hoa đường', add:20000},
+        {id:'fondant', label:'Trang trí fondant', add:40000}
+      ],
+      themes:[
+        {id:'minimal', label:'Minimalist', add:0},
+        {id:'kids', label:'Kids', add:20000},
+        {id:'ocean', label:'Ocean', add:15000},
+        {id:'galaxy', label:'Galaxy', add:15000}
+      ],
+      extras:{ candle:5000, card:0, sparkle:10000, knife:3000 },
+      diet:{ vegan:20000, gf:15000 }
+    };
+
+    const state = { size:'s1', shape:'round', sponge:'vanilla', frosting:'whip', color:'blue', filling:'vietquat', toppings:[], theme:'minimal', msg:'', extras:{candle:false, card:true, sparkle:false, knife:false}, vegan:false, gf:false, date:'', time:'' };
+
+    function init(){
+      buildChips('#sizeGroup', DATA.sizes, 'size');
+      buildChips('#shapeGroup', DATA.shapes, 'shape');
+      buildChips('#spongeGroup', DATA.sponges, 'sponge');
+      buildChips('#frostingGroup', DATA.frostings, 'frosting');
+      buildChips('#colorGroup', DATA.colors, 'color');
+      buildChips('#themeGroup', DATA.themes, 'theme');
+      buildRadios('#fillingGroup', DATA.fillings, 'filling');
+      buildChecks('#toppingGroup', DATA.toppings, 'toppings');
+
+      // inputs
+      $('#msg').addEventListener('input', e=>{ state.msg = e.target.value; $('#msgText').textContent = state.msg || 'HAPPY DAY'; });
+      $('#optVegan').addEventListener('change', e=>{ state.vegan = e.target.checked; recalc(); });
+      $('#optGF').addEventListener('change', e=>{ state.gf = e.target.checked; recalc(); });
+      $('#optCandle').addEventListener('change', e=>{ state.extras.candle = e.target.checked; recalc(); toggleCandle(); });
+      $('#optCard').addEventListener('change', e=>{ state.extras.card = e.target.checked; recalc(); });
+      $('#optSparkle').addEventListener('change', e=>{ state.extras.sparkle = e.target.checked; recalc(); });
+      $('#optKnife').addEventListener('change', e=>{ state.extras.knife = e.target.checked; recalc(); });
+      $('#refImg').addEventListener('change', handleRefImg);
+
+      // time slots
+      renderTimes();
+
+      // defaults
+      updateSVG();
+      recalc();
+
+      // restore badges
+      const c=store.get('cart').length, w=store.get('wishlist').length; if(c){ const b=$('#cartBadge'); b.textContent=c; b.classList.remove('hidden'); } if(w){ const b=$('#wishlistBadge'); b.textContent=w; b.classList.remove('hidden'); }
+
+      $('#addToCart').addEventListener('click', addToCart);
+      $('#savePreset').addEventListener('click', savePreset);
+      $('#resetBtn').addEventListener('click', resetAll);
+
+      if(window.lucide) window.lucide.createIcons();
+    }
+
+    function buildChips(containerSel, items, key){
+      const wrap = $(containerSel); wrap.innerHTML='';
+      items.forEach(it=>{
+        const b = document.createElement('button');
+        b.className = 'chip inline-flex items-center gap-2 px-3 py-2 rounded-xl ring-1 ring-primary-200 bg-white hover:bg-primary-50 text-sm';
+        b.textContent = it.label; b.dataset.id = it.id;
+        if(state[key]===it.id) b.classList.add('bg-primary-600','text-white');
+        b.addEventListener('click', ()=>{ state[key]=it.id; highlight(wrap, it.id); if(key==='color'||key==='frosting'||key==='shape') updateSVG(); recalc(); });
+        wrap.appendChild(b);
+      });
+    }
+    function buildRadios(containerSel, items, key){
+      const wrap = $(containerSel); wrap.innerHTML='';
+      items.forEach(it=>{
+        const id = `${key}-${it.id}`;
+        const row = document.createElement('label'); row.className='inline-flex items-center justify-between gap-3 rounded-xl ring-1 ring-primary-200 bg-white hover:bg-primary-50 px-3 py-2';
+        row.innerHTML = `<span class="text-sm">${it.label}</span><span class="text-xs text-slate-500">+${fmt(it.add)}</span><input type="radio" name="${key}" id="${id}" class="rounded">`;
+        row.querySelector('input').checked = state[key]===it.id;
+        row.querySelector('input').addEventListener('change', ()=>{ state[key]=it.id; recalc(); updateSVG(); });
+        wrap.appendChild(row);
+      });
+    }
+    function buildChecks(containerSel, items, key){
+      const wrap = $(containerSel); wrap.innerHTML='';
+      items.forEach(it=>{
+        const id = `${key}-${it.id}`;
+        const row = document.createElement('label'); row.className='inline-flex items-center justify-between gap-3 rounded-xl ring-1 ring-primary-200 bg-white hover:bg-primary-50 px-3 py-2';
+        row.innerHTML = `<span class="text-sm">${it.label}</span><span class="text-xs text-slate-500">+${fmt(it.add)}</span><input type="checkbox" id="${id}" class="rounded">`;
+        row.querySelector('input').checked = state[key].includes(it.id);
+        row.querySelector('input').addEventListener('change', e=>{ const on=e.target.checked; if(on) state[key].push(it.id); else state[key]=state[key].filter(x=>x!==it.id); recalc(); });
+        wrap.appendChild(row);
+      });
+    }
+
+    function highlight(wrap, id){
+      $$('.chip', wrap).forEach(b=>{
+        const active = b.dataset.id===id; b.classList.toggle('bg-primary-600', active); b.classList.toggle('text-white', active); b.classList.toggle('bg-white', !active);
+      });
+    }
+
+    function updateSVG(){
+      const color = DATA.colors.find(c=>c.id===state.color);
+      const frosting = DATA.frostings.find(f=>f.id===state.frosting);
+      $('#cakeBody').setAttribute('fill', color.hexBody);
+      $('#cakeBody').setAttribute('stroke', shade(color.hexBody, -12));
+      $('#cakeStripe').setAttribute('fill', frosting.color);
+      $('#frosting').setAttribute('fill', color.hexFrost);
+      $('#msgText').textContent = state.msg || 'HAPPY DAY';
+
+      // shape radius / heart
+      if(state.shape==='heart'){
+        // approximate heart with path + adjust elements positions
+        $('#cakeBody').setAttribute('visibility','hidden');
+        if(!$('#heartBody')){
+          const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+          p.setAttribute('id','heartBody');
+          p.setAttribute('d','M160 210 C120 170 70 150 90 120 C110 95 145 110 160 130 C175 110 210 95 230 120 C250 150 200 170 160 210 Z');
+          p.setAttribute('stroke-width','4');
+          $('#cakeSVG').appendChild(p);
+        }
+        const heart = $('#heartBody'); heart.setAttribute('fill', color.hexBody); heart.setAttribute('stroke', shade(color.hexBody, -12));
+      } else {
+        $('#cakeBody').setAttribute('visibility','visible');
+        $('#heartBody')?.setAttribute('fill','none');
+      }
+
+      // candle on/off via extras
+      toggleCandle();
+    }
+
+    function toggleCandle(){
+      const show = state.extras.candle; $('#candle').setAttribute('opacity', show? '1':'0'); $('#flame').setAttribute('opacity', show? '1':'0');
+    }
+
+    function recalc(){
+      const size = DATA.sizes.find(s=>s.id===state.size);
+      const shape = DATA.shapes.find(s=>s.id===state.shape);
+      const sponge = DATA.sponges.find(s=>s.id===state.sponge);
+      const frosting = DATA.frostings.find(s=>s.id===state.frosting);
+      const filling = DATA.fillings.find(f=>f.id===state.filling);
+      const theme = DATA.themes.find(t=>t.id===state.theme);
+
+      let price = size.price;
+      price += sponge.add + frosting.add + filling.add + theme.add;
+      state.toppings.forEach(id => price += DATA.toppings.find(t=>t.id===id).add);
+      price = Math.round(price * shape.multiplier);
+      if(state.vegan) price += DATA.diet.vegan;
+      if(state.gf) price += DATA.diet.gf;
+      if(state.extras.candle) price += DATA.extras.candle;
+      if(state.extras.sparkle) price += DATA.extras.sparkle;
+      if(state.extras.knife) price += DATA.extras.knife;
+      // card is free
+
+      $('#price').textContent = fmt(price);
+      $('#weightLabel').textContent = size.label;
+      $('#servingLabel').textContent = `${size.servings} người`;
+      $('#dietLabel').textContent = `${state.vegan? 'Vegan • ':''}${state.gf? 'Không gluten':''}`;
+    }
+
+    function shade(hex, amt){
+      // simple hex shade helper (-20..20)
+      let c = hex.replace('#',''); if(c.length===3) c = c.split('').map(x=>x+x).join('');
+      const num = parseInt(c,16); let r=(num>>16)+amt,g=((num>>8)&0x00FF)+amt,b=(num&0x0000FF)+amt; r=Math.max(Math.min(255,r),0); g=Math.max(Math.min(255,g),0); b=Math.max(Math.min(255,b),0); return '#'+(b| (g<<8) | (r<<16)).toString(16).padStart(6,'0');
+    }
+
+    function renderTimes(){
+      const sel = $('#time'); sel.innerHTML='';
+      for(let h=9; h<=20; h++){ for(let m=0;m<60;m+=30){ const v=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`; const o=document.createElement('option'); o.value=v; o.textContent=v; sel.appendChild(o);} }
+      const today = new Date(); const yyyy=today.getFullYear(); const mm=String(today.getMonth()+1).padStart(2,'0'); const dd=String(today.getDate()).padStart(2,'0');
+      $('#date').value = `${yyyy}-${mm}-${dd}`;
+    }
+
+    function handleRefImg(e){
+      const file = e.target.files?.[0]; if(!file) return; const url = URL.createObjectURL(file); $('#refPreview').classList.remove('hidden'); $('#refImgTag').src = url;
+    }
+
+    function addToCart(){
+      const payload = { type:'custom', ...state };
+      const c = store.add('cart', payload);
+      const b = $('#cartBadge'); b.textContent=c; b.classList.remove('hidden');
+      toast('Đã thêm cấu hình bánh vào giỏ');
+    }
+
+    function savePreset(){
+      const presets = JSON.parse(localStorage.getItem('presets')||'[]'); presets.push(state); localStorage.setItem('presets', JSON.stringify(presets)); toast('Đã lưu cấu hình');
+    }
+
+    function resetAll(){
+      Object.assign(state, { size:'s1', shape:'round', sponge:'vanilla', frosting:'whip', color:'blue', filling:'vietquat', toppings:[], theme:'minimal', msg:'', extras:{candle:false, card:true, sparkle:false, knife:false}, vegan:false, gf:false });
+      // rebuild UI highlights
+      buildChips('#sizeGroup', DATA.sizes, 'size');
+      buildChips('#shapeGroup', DATA.shapes, 'shape');
+      buildChips('#spongeGroup', DATA.sponges, 'sponge');
+      buildChips('#frostingGroup', DATA.frostings, 'frosting');
+      buildChips('#colorGroup', DATA.colors, 'color');
+      buildChips('#themeGroup', DATA.themes, 'theme');
+      buildRadios('#fillingGroup', DATA.fillings, 'filling');
+      buildChecks('#toppingGroup', DATA.toppings, 'toppings');
+      $('#msg').value=''; $('#refPreview').classList.add('hidden');
+      updateSVG(); recalc(); if(window.lucide) window.lucide.createIcons();
+    }
+
+    // wiring chips click -> state update
+    document.addEventListener('click', (e)=>{
+      const b = e.target.closest('.chip'); if(!b) return; const group = b.parentElement; $$('.chip', group).forEach(x=> x.classList.remove('bg-primary-600','text-white')); b.classList.add('bg-primary-600','text-white');
+    });
+
+    window.addEventListener('DOMContentLoaded', ()=>{ init(); });
+  </script>
+</body>
+</html>

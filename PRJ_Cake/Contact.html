@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SweetDay Cakes | Liên hệ</title>
+  <meta name="description" content="Liên hệ SweetDay: form hỗ trợ, hotline, giờ mở cửa, địa chỉ và bản đồ (placeholder)." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { fontFamily: { sans: ["Plus Jakarta Sans","system-ui","-apple-system","Segoe UI","Roboto","Noto Sans","sans-serif"] }, colors: { primary: {50:'#EFF8FF',100:'#DBEDFF',200:'#BFE1FF',300:'#93CEFF',400:'#63B6FF',500:'#3BA0FF',600:'#2188EE',700:'#1A73D6',800:'#195CAB',900:'#154C8B'}, cream:'#FFF7F1', choco:'#6B4F4F', strawberry:'#FF6B6B', mint:'#B7F0E3' }, boxShadow:{ soft:'0 10px 25px -10px rgba(30,64,175,.25)'} } } }
+  </script>
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <style>html{scroll-behavior:smooth} :focus-visible{outline:2px solid #3BA0FF; outline-offset:2px} .req:after{content:'*';color:#1A73D6;margin-left:.25rem}</style>
+</head>
+<body class="bg-primary-50 text-slate-800">
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-primary-100">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <a href="index.html" class="flex items-center gap-2">
+        <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary-100 text-primary-700 shadow-soft"><i data-lucide="phone" class="w-5 h-5"></i></span>
+        <span class="text-lg font-extrabold text-primary-700">Liên hệ</span>
+      </a>
+      <nav class="flex items-center gap-2">
+        <a href="faq.html" class="p-2 rounded-xl hover:bg-primary-100" title="FAQ"><i data-lucide="help-circle" class="w-5 h-5"></i></a>
+        <a href="delivery-info.html" class="p-2 rounded-xl hover:bg-primary-100" title="Giao hàng"><i data-lucide="truck" class="w-5 h-5"></i></a>
+      </nav>
+    </div>
+    <div class="container mx-auto px-4 pb-3 text-sm text-slate-600">
+      <a class="hover:text-primary-700" href="index.html">Trang chủ</a> <span class="mx-1">›</span>
+      <span class="text-slate-500">Liên hệ</span>
+    </div>
+  </header>
+
+  <!-- Top cards -->
+  <section class="container mx-auto px-4 pt-6 grid md:grid-cols-3 gap-4">
+    <div class="rounded-3xl border border-primary-200 bg-white p-5">
+      <div class="flex items-center gap-3">
+        <div class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary-100 text-primary-700"><i data-lucide="phone-call" class="w-5 h-5"></i></div>
+        <div>
+          <div class="text-xs text-slate-500">Hotline</div>
+          <div class="text-lg font-extrabold text-primary-700"><a href="tel:19001234">1900 1234</a></div>
+          <div class="text-xs text-slate-500">08:00–21:00 hàng ngày</div>
+        </div>
+      </div>
+    </div>
+    <div class="rounded-3xl border border-primary-200 bg-white p-5">
+      <div class="flex items-center gap-3">
+        <div class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary-100 text-primary-700"><i data-lucide="message-square-text" class="w-5 h-5"></i></div>
+        <div>
+          <div class="text-xs text-slate-500">Chat nhanh</div>
+          <div class="text-lg font-extrabold text-primary-700">Facebook / Zalo</div>
+          <div class="text-xs text-slate-500">Phản hồi trong 5–15 phút</div>
+        </div>
+      </div>
+    </div>
+    <div class="rounded-3xl border border-primary-200 bg-white p-5">
+      <div class="flex items-center gap-3">
+        <div class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary-100 text-primary-700"><i data-lucide="mail" class="w-5 h-5"></i></div>
+        <div>
+          <div class="text-xs text-slate-500">Email</div>
+          <div class="text-lg font-extrabold text-primary-700"><a href="mailto:hello@sweetday.vn">hello@sweetday.vn</a></div>
+          <div class="text-xs text-slate-500">Trả lời trong 24h</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main -->
+  <main class="container mx-auto px-4 py-6 md:py-8 grid lg:grid-cols-12 gap-6">
+    <!-- Form -->
+    <section class="lg:col-span-7">
+      <div class="rounded-3xl border border-primary-200 bg-white p-6 md:p-8">
+        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900">Gửi yêu cầu hỗ trợ</h1>
+        <p class="mt-1 text-slate-600 text-sm">Điền thông tin để SweetDay hỗ trợ bạn nhanh nhất.</p>
+
+        <form id="form" class="mt-4 grid gap-4">
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="req block text-sm font-semibold text-slate-900">Họ và tên</label>
+              <input id="name" type="text" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" required />
+            </div>
+            <div>
+              <label class="req block text-sm font-semibold text-slate-900">Số điện thoại</label>
+              <input id="phone" type="tel" placeholder="09xx xxx xxx" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" required />
+            </div>
+          </div>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-slate-900">Email</label>
+              <input id="email" type="email" placeholder="you@example.com" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-900">Mã đơn (nếu có)</label>
+              <input id="orderId" type="text" placeholder="VD: SD-20250819-1234" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" />
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="req block text-sm font-semibold text-slate-900">Chủ đề</label>
+              <select id="topic" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" required>
+                <option value="">— Chọn chủ đề —</option>
+                <option>Hỗ trợ đơn hàng</option>
+                <option>Tư vấn đặt bánh</option>
+                <option>Góp ý/chất lượng</option>
+                <option>Hợp tác/đối tác</option>
+                <option>Khác</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-900">Ưu tiên</label>
+              <select id="priority" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm">
+                <option>Thường</option>
+                <option>Gấp</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="req block text-sm font-semibold text-slate-900">Nội dung</label>
+            <textarea id="message" rows="5" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" placeholder="Mô tả chi tiết yêu cầu của bạn" required></textarea>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-4">
+            <label class="inline-flex items-center gap-2 text-sm text-slate-700"><input id="agree" type="checkbox" class="rounded"> Tôi đồng ý để SweetDay liên hệ lại qua điện thoại/email.</label>
+            <div class="text-xs text-slate-500">* Dữ liệu chỉ dùng để hỗ trợ bạn theo <a href="policies-privacy.html" class="text-primary-700 underline">Chính sách bảo mật</a>.</div>
+          </div>
+
+          <!-- Honeypot anti-bot -->
+          <input type="text" id="website" name="website" class="hidden" tabindex="-1" autocomplete="off" />
+
+          <div class="flex items-center gap-3">
+            <button class="inline-flex items-center gap-2 rounded-2xl bg-primary-600 text-white px-5 py-3 font-semibold hover:bg-primary-700"><i data-lucide="send" class="w-5 h-5"></i> Gửi yêu cầu</button>
+            <button type="reset" class="inline-flex items-center gap-2 rounded-2xl bg-white text-primary-700 ring-1 ring-primary-200 px-5 py-3 font-semibold hover:bg-primary-50">Làm mới</button>
+          </div>
+          <div id="formInfo" class="hidden text-sm text-primary-700">Đã gửi yêu cầu (demo). Mã hỗ trợ: <b id="ticket"></b>. Chúng tôi sẽ phản hồi sớm.</div>
+        </form>
+      </div>
+
+      <!-- Other support channels -->
+      <div class="mt-4 grid sm:grid-cols-2 gap-4">
+        <a href="faq.html" class="rounded-3xl border border-primary-200 bg-white p-5 flex items-center gap-3">
+          <i data-lucide="help-circle" class="w-5 h-5 text-primary-600"></i>
+          <div>
+            <div class="font-semibold text-slate-900">Câu hỏi thường gặp</div>
+            <div class="text-xs text-slate-600">Giao hàng, bảo quản, nến & thiệp…</div>
+          </div>
+        </a>
+        <a href="policies-returns.html" class="rounded-3xl border border-primary-200 bg-white p-5 flex items-center gap-3">
+          <i data-lucide="rotate-ccw" class="w-5 h-5 text-primary-600"></i>
+          <div>
+            <div class="font-semibold text-slate-900">Đổi/Hoàn</div>
+            <div class="text-xs text-slate-600">Xem chính sách và quy trình</div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Map & info -->
+    <aside class="lg:col-span-5 grid gap-4">
+      <!-- Map placeholder -->
+      <div class="rounded-3xl border border-primary-200 bg-white overflow-hidden">
+        <div class="aspect-video grid place-items-center bg-[url('https://tile.openstreetmap.org/10/868/535.png')] bg-cover bg-center">
+          <div class="backdrop-blur-sm bg-white/70 rounded-xl px-3 py-1 text-sm text-slate-700">Bản đồ demo (nhúng Google Maps/OpenStreetMap sau)</div>
+        </div>
+      </div>
+
+      <!-- Locations & hours -->
+      <div class="rounded-3xl border border-primary-200 bg-white p-6">
+        <h3 class="text-lg font-bold text-slate-900">Cửa hàng & giờ mở cửa</h3>
+        <div class="mt-3 grid gap-3 text-sm">
+          <div class="rounded-2xl ring-1 ring-primary-200 p-3 flex items-start gap-3">
+            <i data-lucide="map-pin" class="w-4 h-4 text-primary-600 mt-0.5"></i>
+            <div>
+              <div class="font-semibold text-slate-900">SweetDay – Quận 3</div>
+              <div class="text-slate-600">123 Võ Văn Tần, P.6, Q.3, TP.HCM</div>
+              <div class="text-slate-500 text-xs">08:00–21:00 (T2–CN)</div>
+            </div>
+          </div>
+          <div class="rounded-2xl ring-1 ring-primary-200 p-3 flex items-start gap-3">
+            <i data-lucide="map-pin" class="w-4 h-4 text-primary-600 mt-0.5"></i>
+            <div>
+              <div class="font-semibold text-slate-900">SweetDay – Phú Nhuận</div>
+              <div class="text-slate-600">45 Hoa Sứ, P.7, Phú Nhuận, TP.HCM</div>
+              <div class="text-slate-500 text-xs">09:00–21:00 (T2–CN)</div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-3 grid grid-cols-2 gap-3 text-sm">
+          <a href="tel:19001234" class="rounded-xl bg-primary-600 text-white px-3 py-2 font-semibold text-center hover:bg-primary-700"><i data-lucide="phone" class="inline w-4 h-4 mr-1"></i> Gọi ngay</a>
+          <a href="mailto:hello@sweetday.vn" class="rounded-xl bg-white text-primary-700 ring-1 ring-primary-200 px-3 py-2 font-semibold text-center hover:bg-primary-50"><i data-lucide="mail" class="inline w-4 h-4 mr-1"></i> Gửi email</a>
+        </div>
+      </div>
+
+      <!-- Socials -->
+      <div class="rounded-3xl border border-primary-200 bg-white p-6">
+        <h3 class="text-lg font-bold text-slate-900">Kết nối</h3>
+        <div class="mt-3 flex flex-wrap gap-2 text-sm">
+          <a class="rounded-2xl bg-white text-primary-700 ring-1 ring-primary-200 px-3 py-2 font-semibold hover:bg-primary-50" href="#"><i data-lucide="facebook" class="w-4 h-4"></i> Facebook</a>
+          <a class="rounded-2xl bg-white text-primary-700 ring-1 ring-primary-200 px-3 py-2 font-semibold hover:bg-primary-50" href="#"><i data-lucide="instagram" class="w-4 h-4"></i> Instagram</a>
+          <a class="rounded-2xl bg-white text-primary-700 ring-1 ring-primary-200 px-3 py-2 font-semibold hover:bg-primary-50" href="#"><i data-lucide="message-circle" class="w-4 h-4"></i> Zalo</a>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed left-1/2 -translate-x-1/2 bottom-6 z-50 hidden">
+    <div class="rounded-2xl bg-slate-900 text-white px-4 py-3 text-sm shadow-xl flex items-center gap-2">
+      <i data-lucide="check-circle" class="w-4 h-4 text-mint"></i>
+      <span id="toastMsg">Đã gửi</span>
+    </div>
+  </div>
+
+  <script>
+    const $=(s,r=document)=>r.querySelector(s); const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+    const toast=(m)=>{ $('#toastMsg').textContent=m; $('#toast').classList.remove('hidden'); setTimeout(()=>$('#toast').classList.add('hidden'),1400); };
+
+    function validatePhone(v){ return /^0\d{9,10}$/.test((v||'').trim()); }
+
+    function genTicket(){ const d=new Date(); const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const dy=String(d.getDate()).padStart(2,'0'); const rnd=Math.floor(Math.random()*9000)+1000; return `SDT-${y}${m}${dy}-${rnd}`; }
+
+    function init(){
+      // Prefill from account if available
+      try{ const u=JSON.parse(localStorage.getItem('auth.user')||'null'); if(u){ $('#name').value=u.name||''; $('#phone').value=u.phone||''; $('#email').value=u.email||''; } }catch{}
+
+      $('#form').addEventListener('submit', (e)=>{
+        e.preventDefault();
+        const name=$('#name').value.trim(); const phone=$('#phone').value.trim(); const email=$('#email').value.trim(); const topic=$('#topic').value; const msg=$('#message').value.trim();
+        if(!name||!phone||!topic||!msg){ toast('Vui lòng điền đầy đủ thông tin bắt buộc'); return; }
+        if(!validatePhone(phone)){ toast('SĐT không hợp lệ'); return; }
+        if($('#website').value){ return; } // honeypot
+        const ticket=genTicket(); $('#ticket').textContent=ticket; $('#formInfo').classList.remove('hidden'); toast('Đã gửi yêu cầu (demo)');
+        // Save a copy locally (demo inbox)
+        const inbox=JSON.parse(localStorage.getItem('supportInbox')||'[]'); inbox.push({ticket,name,phone,email,topic,msg,orderId:$('#orderId').value,priority:$('#priority').value,createdAt:new Date().toISOString()}); localStorage.setItem('supportInbox', JSON.stringify(inbox));
+        // Reset form minimal
+        $('#form').reset();
+      });
+
+      if(window.lucide) window.lucide.createIcons();
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

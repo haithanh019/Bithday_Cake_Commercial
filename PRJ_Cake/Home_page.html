@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SweetDay Cakes | Bánh sinh nhật & quà ngọt</title>
+  <meta name="description" content="Cửa hàng bánh sinh nhật SweetDay: đặt bánh theo yêu cầu, giao nhanh trong ngày, nhiều hương vị và kiểu dáng." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind custom theme: light blue primary
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Plus Jakarta Sans", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "Noto Sans", "sans-serif"],
+          },
+          colors: {
+            primary: {
+              50:  '#EFF8FF',
+              100: '#DBEDFF',
+              200: '#BFE1FF',
+              300: '#93CEFF',
+              400: '#63B6FF',
+              500: '#3BA0FF', // chủ đạo xanh dương nhạt
+              600: '#2188EE',
+              700: '#1A73D6',
+              800: '#195CAB',
+              900: '#154C8B'
+            },
+            cream: '#FFF7F1',
+            choco: '#6B4F4F',
+            strawberry: '#FF6B6B',
+            mint: '#B7F0E3'
+          },
+          boxShadow: {
+            soft: '0 10px 25px -10px rgba(30, 64, 175, 0.25)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Icons -->
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* Smooth scroll & nicer focus */
+    html { scroll-behavior: smooth; }
+    :focus-visible { outline: 2px solid #3BA0FF; outline-offset: 2px; }
+  </style>
+</head>
+<body class="bg-primary-50 text-slate-800">
+  <!-- Announcement Bar -->
+  <div class="bg-primary-600 text-white text-sm">
+    <div class="container mx-auto px-4 py-2 flex items-center justify-between">
+      <p class="truncate">🎉 Miễn phí giao nội thành cho đơn từ 350.000₫ • Đặt trước 3h để giao trong ngày</p>
+      <a href="#deals" class="underline hidden sm:block">Xem khuyến mãi</a>
+    </div>
+  </div>
+
+  <!-- Header / Nav -->
+  <header class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-primary-100">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between py-3 gap-4">
+        <!-- Logo -->
+        <a href="#" class="flex items-center gap-2 group">
+          <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary-100 text-primary-700 shadow-soft">
+            <i data-lucide="cake" class="w-5 h-5"></i>
+          </span>
+          <div class="leading-tight">
+            <div class="text-lg font-extrabold tracking-tight text-primary-700">SweetDay</div>
+            <div class="text-[11px] uppercase text-slate-500">Cakes & Gifts</div>
+          </div>
+        </a>
+
+        <!-- Search -->
+        <div class="hidden lg:flex flex-1 max-w-xl">
+          <label class="relative w-full">
+            <input type="text" placeholder="Tìm: bánh dâu 1kg, fondant, không gluten…" class="w-full rounded-2xl border border-primary-200 bg-white/70 py-2.5 pl-10 pr-4 text-sm placeholder-slate-400 focus:border-primary-400 focus:ring-2 focus:ring-primary-200" />
+            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+          </label>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-2">
+          <button class="p-2 rounded-xl hover:bg-primary-100" aria-label="Tìm kiếm" onclick="toggleMobileSearch()">
+            <i data-lucide="search" class="w-5 h-5 lg:hidden"></i>
+          </button>
+          <a href="#wishlist" class="p-2 rounded-xl hover:bg-primary-100 relative" aria-label="Yêu thích">
+            <i data-lucide="heart" class="w-5 h-5"></i>
+            <span id="wishlistBadge" class="absolute -top-1 -right-1 text-[10px] bg-strawberry text-white rounded-full px-1.5 py-0.5 hidden">0</span>
+          </a>
+          <a href="#cart" class="p-2 rounded-xl hover:bg-primary-100 relative" aria-label="Giỏ hàng">
+            <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+            <span id="cartBadge" class="absolute -top-1 -right-1 text-[10px] bg-primary-600 text-white rounded-full px-1.5 py-0.5 hidden">0</span>
+          </a>
+          <a href="#account" class="p-2 rounded-xl hover:bg-primary-100" aria-label="Tài khoản">
+            <i data-lucide="user" class="w-5 h-5"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Mobile Search -->
+      <div id="mobileSearch" class="lg:hidden hidden pb-3">
+        <label class="relative w-full block">
+          <input type="text" placeholder="Tìm: bánh dâu 1kg, fondant…" class="w-full rounded-2xl border border-primary-200 bg-white py-2.5 pl-10 pr-4 text-sm placeholder-slate-400 focus:border-primary-400 focus:ring-2 focus:ring-primary-200" />
+          <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+        </label>
+      </div>
+
+      <!-- Secondary Nav -->
+      <nav class="hidden md:flex items-center gap-5 pb-3">
+        <a class="text-sm font-medium text-slate-700 hover:text-primary-700" href="#categories">Danh mục</a>
+        <a class="text-sm font-medium text-slate-700 hover:text-primary-700" href="#featured">Sản phẩm nổi bật</a>
+        <a class="text-sm font-medium text-slate-700 hover:text-primary-700" href="#builder">Đặt bánh theo yêu cầu</a>
+        <a class="text-sm font-medium text-slate-700 hover:text-primary-700" href="#blog">Blog</a>
+        <a class="text-sm font-medium text-slate-700 hover:text-primary-700" href="#contact">Liên hệ</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
+    <div class="container mx-auto px-4 py-12 md:py-16">
+      <div class="grid md:grid-cols-2 items-center gap-10">
+        <div>
+          <div class="inline-flex items-center gap-2 rounded-full bg-primary-100 px-3 py-1 text-xs font-medium text-primary-700"> 
+            <i data-lucide="sparkles" class="w-4 h-4"></i> Bánh mới tuần này
+          </div>
+          <h1 class="mt-4 text-3xl md:text-5xl font-extrabold leading-tight text-slate-900">
+            Ngọt ngào ngày sinh nhật
+            <span class="text-primary-600">theo ý bạn</span>
+          </h1>
+          <p class="mt-3 text-slate-600 md:text-lg">Từ bánh kem cổ điển đến fondant nghệ thuật. Giao nhanh 2–4 giờ trong nội thành, cam kết tươi mới mỗi ngày.</p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href="#featured" class="inline-flex items-center gap-2 rounded-2xl bg-primary-600 text-white px-5 py-3 font-semibold shadow-soft hover:bg-primary-700">
+              Mua ngay <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+            <a href="#builder" class="inline-flex items-center gap-2 rounded-2xl bg-white text-primary-700 ring-1 ring-primary-200 px-5 py-3 font-semibold hover:bg-primary-50">
+              Tự thiết kế bánh
+            </a>
+          </div>
+
+          <!-- Trust badges -->
+          <div class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="flex items-center gap-2 text-sm text-slate-600"><i data-lucide="truck" class="w-4 h-4 text-primary-600"></i>Giao nhanh</div>
+            <div class="flex items-center gap-2 text-sm text-slate-600"><i data-lucide="check-circle" class="w-4 h-4 text-primary-600"></i>Tươi mỗi ngày</div>
+            <div class="flex items-center gap-2 text-sm text-slate-600"><i data-lucide="badge-check" class="w-4 h-4 text-primary-600"></i>VSATTP</div>
+            <div class="flex items-center gap-2 text-sm text-slate-600"><i data-lucide="credit-card" class="w-4 h-4 text-primary-600"></i>COD/chuyển khoản</div>
+          </div>
+        </div>
+
+        <!-- Hero Visual -->
+        <div class="relative">
+          <div class="absolute -inset-10 -z-10 bg-gradient-to-br from-primary-200 via-primary-100 to-cream rounded-[3rem] rotate-6 blur-2xl opacity-70"></div>
+          <div class="rounded-[2rem] bg-white p-4 md:p-6 shadow-soft border border-primary-100">
+            <img class="rounded-2xl aspect-[4/3] object-cover w-full" alt="Bánh sinh nhật kem xanh dương nhạt" src="https://images.unsplash.com/photo-1612206891338-6e1b9e46d0f6?q=80&w=1600&auto=format&fit=crop" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section id="categories" class="py-10 md:py-14 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="flex items-end justify-between gap-4 mb-6">
+        <h2 class="text-2xl md:text-3xl font-bold text-slate-900">Khám phá theo dịp</h2>
+        <a href="#shop" class="text-sm font-semibold text-primary-700 hover:text-primary-800">Xem tất cả</a>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Card -->
+        <a class="group relative overflow-hidden rounded-2xl bg-primary-100 p-4 border border-primary-200" href="#">
+          <img class="rounded-xl aspect-[4/3] object-cover w-full group-hover:scale-105 transition" src="https://images.unsplash.com/photo-1606313564200-e75d5e30476a?q=80&w=1600&auto=format&fit=crop" alt="Bánh sinh nhật cổ điển" />
+          <div class="absolute inset-0 bg-gradient-to-t from-primary-900/50 to-transparent"></div>
+          <div class="absolute bottom-4 left-4 text-white">
+            <div class="text-sm">Classic</div>
+            <div class="text-lg font-bold">Sinh nhật</div>
+          </div>
+        </a>
+        <a class="group relative overflow-hidden rounded-2xl bg-primary-100 p-4 border border-primary-200" href="#">
+          <img class="rounded-xl aspect-[4/3] object-cover w-full group-hover:scale-105 transition" src="https://images.unsplash.com/photo-1582650947015-9d9a9f8d3c4b?q=80&w=1600&auto=format&fit=crop" alt="Bánh cho bé" />
+          <div class="absolute inset-0 bg-gradient-to-t from-primary-900/50 to-transparent"></div>
+          <div class="absolute bottom-4 left-4 text-white">
+            <div class="text-sm">Kids</div>
+            <div class="text-lg font-bold">Thiết kế ngộ nghĩnh</div>
+          </div>
+        </a>
+        <a class="group relative overflow-hidden rounded-2xl bg-primary-100 p-4 border border-primary-200" href="#">
+          <img class="rounded-xl aspect-[4/3] object-cover w-full group-hover:scale-105 transition" src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?q=80&w=1600&auto=format&fit=crop" alt="Bánh cưới" />
+          <div class="absolute inset-0 bg-gradient-to-t from-primary-900/50 to-transparent"></div>
+          <div class="absolute bottom-4 left-4 text-white">
+            <div class="text-sm">Wedding</div>
+            <div class="text-lg font-bold">Cưới hỏi</div>
+          </div>
+        </a>
+        <a class="group relative overflow-hidden rounded-2xl bg-primary-100 p-4 border border-primary-200" href="#">
+          <img class="rounded-xl aspect-[4/3] object-cover w-full group-hover:scale-105 transition" src="https://images.unsplash.com/photo-1614707267537-084525f0b2a8?q=80&w=1600&auto=format&fit=crop" alt="Cupcakes" />
+          <div class="absolute inset-0 bg-gradient-to-t from-primary-900/50 to-transparent"></div>
+          <div class="absolute bottom-4 left-4 text-white">
+            <div class="text-sm">Cupcakes</div>
+            <div class="text-lg font-bold">Teabreak & Party</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section id="featured" class="py-12 md:py-16 bg-primary-50">
+    <div class="container mx-auto px-4">
+      <div class="flex items-end justify-between gap-4 mb-6">
+        <h2 class="text-2xl md:text-3xl font-bold text-slate-900">Sản phẩm nổi bật</h2>
+        <div class="flex items-center gap-2">
+          <label class="text-sm text-slate-600">Sắp xếp:</label>
+          <select class="text-sm rounded-xl border border-primary-200 bg-white px-3 py-2 focus:ring-primary-200">
+            <option>Mới nhất</option>
+            <option>Bán chạy</option>
+            <option>Giá tăng dần</option>
+            <option>Giá giảm dần</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Product Card Template (clone for demo) -->
+        <template id="productCardTpl">
+          <div class="group rounded-2xl bg-white border border-primary-100 overflow-hidden shadow-soft">
+            <div class="relative">
+              <img class="w-full aspect-square object-cover" alt="Bánh kem" />
+              <button class="absolute top-3 right-3 inline-flex items-center justify-center rounded-full bg-white/90 hover:bg-white p-2" aria-label="Yêu thích" data-btn-wishlist>
+                <i data-lucide="heart" class="w-4 h-4 text-slate-700"></i>
+              </button>
+              <span class="absolute left-3 top-3 text-[11px] font-bold bg-strawberry text-white px-2 py-1 rounded-full">-15%</span>
+            </div>
+            <div class="p-4">
+              <div class="flex items-center gap-1 text-amber-400" aria-label="Đánh giá">
+                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                <i data-lucide="star-half" class="w-4 h-4"></i>
+              </div>
+              <h3 class="mt-2 font-semibold text-slate-900 line-clamp-2"></h3>
+              <div class="mt-1 text-sm text-slate-500">0.5kg • 2–4 người</div>
+              <div class="mt-3 flex items-center justify-between">
+                <div class="text-primary-700 font-bold" data-price></div>
+                <button class="inline-flex items-center gap-2 rounded-xl bg-primary-600 text-white px-3 py-2 text-sm font-semibold hover:bg-primary-700" data-btn-cart>
+                  <i data-lucide="shopping-cart" class="w-4 h-4"></i> Thêm
+                </button>
+              </div>
+            </div>
+          </div>
+        </template>
+
+        <!-- Grid container -->
+        <div id="productGrid" class="contents"></div>
+      </div>
+
+      <div class="text-center mt-8">
+        <a href="#shop" class="inline-flex items-center gap-2 rounded-2xl bg-white text-primary-700 ring-1 ring-primary-200 px-5 py-3 font-semibold hover:bg-primary-50">Xem thêm</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Promo Banner -->
+  <section id="deals" class="py-8 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="relative overflow-hidden rounded-3xl border border-primary-200 bg-gradient-to-r from-primary-100 to-mint p-6 md:p-10">
+        <div class="max-w-xl">
+          <h3 class="text-2xl md:text-3xl font-extrabold text-primary-900">Combo sinh nhật tiết kiệm</h3>
+          <p class="mt-2 text-slate-700">Bánh 1kg + 10 nến + thiệp viết tay miễn phí. Nhập mã <span class="font-bold">HAPPY10</span> giảm 10%.</p>
+          <div class="mt-5 flex gap-3">
+            <a class="inline-flex items-center gap-2 rounded-2xl bg-primary-600 text-white px-5 py-3 font-semibold shadow-soft hover:bg-primary-700" href="#">
+              Lấy mã ngay <i data-lucide="ticket" class="w-4 h-4"></i>
+            </a>
+            <a class="inline-flex items-center gap-2 rounded-2xl bg-white text-primary-700 ring-1 ring-primary-200 px-5 py-3 font-semibold hover:bg-primary-50" href="#">
+              Xem combo
+            </a>
+          </div>
+        </div>
+        <img alt="Bánh promo" class="hidden md:block absolute right-6 bottom-0 w-64 translate-y-6" src="https://images.unsplash.com/photo-1546397438-20d3be0cfe9a?q=80&w=1200&auto=format&fit=crop" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Builder CTA -->
+  <section id="builder" class="py-12 md:py-16 bg-primary-50">
+    <div class="container mx-auto px-4">
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div class="rounded-3xl overflow-hidden border border-primary-200 bg-white p-4">
+          <img src="https://images.unsplash.com/photo-1575470526629-41a8b486476f?q=80&w=1600&auto=format&fit=crop" alt="Tùy biến bánh theo ý" class="rounded-2xl aspect-[4/3] object-cover w-full" />
+        </div>
+        <div>
+          <h3 class="text-2xl md:text-3xl font-bold text-slate-900">Tự thiết kế chiếc bánh mơ ước</h3>
+          <p class="mt-2 text-slate-600">Chọn cốt bánh, vị kem, màu sắc, topping và lời chúc in lên mặt bánh. Hệ thống tự tính giá theo tuỳ chọn.</p>
+          <ul class="mt-4 space-y-2 text-slate-700">
+            <li class="flex gap-2"><i data-lucide="check" class="w-5 h-5 text-primary-600"></i>Hỗ trợ dị ứng: vegan/không gluten</li>
+            <li class="flex gap-2"><i data-lucide="check" class="w-5 h-5 text-primary-600"></i>Giao trong ngày với mẫu đơn giản</li>
+            <li class="flex gap-2"><i data-lucide="check" class="w-5 h-5 text-primary-600"></i>Thiệp viết tay miễn phí</li>
+          </ul>
+          <a href="#" class="mt-6 inline-flex items-center gap-2 rounded-2xl bg-primary-600 text-white px-5 py-3 font-semibold shadow-soft hover:bg-primary-700">
+            Bắt đầu thiết kế <i data-lucide="wand-2" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="py-12 bg-white">
+    <div class="container mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-6">Khách hàng nói gì</h2>
+      <div class="grid md:grid-cols-3 gap-4">
+        <article class="rounded-2xl border border-primary-200 bg-white p-6 shadow-soft">
+          <div class="flex items-center gap-2 text-amber-400">
+            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+          </div>
+          <p class="mt-3 text-slate-700">“Bánh giao đúng giờ, kem nhẹ và không quá ngọt. Bé nhà mình rất thích!”</p>
+          <div class="mt-4 text-sm text-slate-500">— Ngọc Anh, Q.3</div>
+        </article>
+        <article class="rounded-2xl border border-primary-200 bg-white p-6 shadow-soft">
+          <div class="flex items-center gap-2 text-amber-400">
+            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+            <i data-lucide="star-half" class="w-4 h-4"></i>
+          </div>
+          <p class="mt-3 text-slate-700">“Mẫu fondant rất tinh tế, shop hỗ trợ thay đổi màu theo concept bữa tiệc.”</p>
+          <div class="mt-4 text-sm text-slate-500">— Minh Phúc, Thủ Đức</div>
+        </article>
+        <article class="rounded-2xl border border-primary-200 bg-white p-6 shadow-soft">
+          <div class="flex items-center gap-2 text-amber-400">
+            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+          </div>
+          <p class="mt-3 text-slate-700">“Giá hợp lý, có sẵn combo nến + thiệp rất tiện.”</p>
+          <div class="mt-4 text-sm text-slate-500">— Thuỳ Linh, Bình Thạnh</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Preview -->
+  <section id="blog" class="py-12 md:py-16 bg-primary-50">
+    <div class="container mx-auto px-4">
+      <div class="flex items-end justify-between gap-4 mb-6">
+        <h2 class="text-2xl md:text-3xl font-bold text-slate-900">Góc ngọt & mẹo nhỏ</h2>
+        <a href="#" class="text-sm font-semibold text-primary-700 hover:text-primary-800">Xem tất cả</a>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4">
+        <article class="rounded-2xl overflow-hidden border border-primary-200 bg-white">
+          <img class="w-full aspect-[16/9] object-cover" src="https://images.unsplash.com/photo-1602740479366-88a5e5b1d1a0?q=80&w=1600&auto=format&fit=crop" alt="Chọn size bánh phù hợp" />
+          <div class="p-5">
+            <h3 class="font-bold text-slate-900">Chọn size bánh theo số lượng khách</h3>
+            <p class="text-slate-600 text-sm mt-1">0.5kg cho 2–4 người, 1kg cho 6–10 người… bảng quy đổi nhanh cho mọi bữa tiệc.</p>
+            <a href="#" class="mt-3 inline-flex items-center gap-1 text-primary-700 font-semibold">Đọc bài <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+          </div>
+        </article>
+        <article class="rounded-2xl overflow-hidden border border-primary-200 bg-white">
+          <img class="w-full aspect-[16/9] object-cover" src="https://images.unsplash.com/photo-1582571352032-448f7928eca3?q=80&w=1600&auto=format&fit=crop" alt="Bảo quản bánh kem" />
+          <div class="p-5">
+            <h3 class="font-bold text-slate-900">Bảo quản bánh kem trong 24–48h</h3>
+            <p class="text-slate-600 text-sm mt-1">Giữ lạnh đúng cách để kem mịn và bánh không khô, chia sẻ bởi bếp trưởng.</p>
+            <a href="#" class="mt-3 inline-flex items-center gap-1 text-primary-700 font-semibold">Đọc bài <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+          </div>
+        </article>
+        <article class="rounded-2xl overflow-hidden border border-primary-200 bg-white">
+          <img class="w-full aspect-[16/9] object-cover" src="https://images.unsplash.com/photo-1605478371356-7c64c4a84f8d?q=80&w=1600&auto=format&fit=crop" alt="Xu hướng màu pastel" />
+          <div class="p-5">
+            <h3 class="font-bold text-slate-900">Trend 2025: Pastel & minimalist</h3>
+            <p class="text-slate-600 text-sm mt-1">Gam xanh dương nhạt, hồng phấn và kem đang lên ngôi trong các buổi tiệc.</p>
+            <a href="#" class="mt-3 inline-flex items-center gap-1 text-primary-700 font-semibold">Đọc bài <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="py-12 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="rounded-3xl border border-primary-200 bg-gradient-to-r from-cream to-primary-100 p-6 md:p-10 grid md:grid-cols-2 gap-6 items-center">
+        <div>
+          <h3 class="text-2xl md:text-3xl font-bold text-slate-900">Nhận ưu đãi 1 tuần 1 lần</h3>
+          <p class="mt-2 text-slate-600">Đăng ký để nhận mã giảm và mẫu bánh mới. Chúng mình không spam đâu!</p>
+        </div>
+        <form class="flex gap-3" onsubmit="event.preventDefault(); toast('Cảm ơn bạn đã đăng ký!'); this.reset();">
+          <input required type="email" placeholder="Email của bạn" class="flex-1 rounded-2xl border border-primary-300 bg-white px-4 py-3 text-sm placeholder-slate-500 focus:ring-2 focus:ring-primary-200" />
+          <button class="rounded-2xl bg-primary-600 text-white px-5 py-3 font-semibold hover:bg-primary-700">Đăng ký</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact" class="border-t border-primary-200 bg-white">
+    <div class="container mx-auto px-4 py-10 grid md:grid-cols-4 gap-8">
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary-100 text-primary-700 shadow-soft">
+            <i data-lucide="cake" class="w-5 h-5"></i>
+          </span>
+          <span class="text-lg font-extrabold text-primary-700">SweetDay</span>
+        </div>
+        <p class="text-sm text-slate-600">Bánh tươi mỗi ngày, giao nhanh trong 2–4 giờ. Nhận làm theo yêu cầu.</p>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Liên hệ</h4>
+        <ul class="space-y-2 text-sm text-slate-600">
+          <li class="flex gap-2 items-center"><i data-lucide="phone" class="w-4 h-4 text-primary-600"></i> 0900 000 888</li>
+          <li class="flex gap-2 items-center"><i data-lucide="mail" class="w-4 h-4 text-primary-600"></i> hello@sweetday.vn</li>
+          <li class="flex gap-2 items-center"><i data-lucide="map-pin" class="w-4 h-4 text-primary-600"></i> 123 Lê Lợi, Q.1, TP.HCM</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Hỗ trợ</h4>
+        <ul class="space-y-2 text-sm text-slate-600">
+          <li><a class="hover:text-primary-700" href="#">Giao hàng</a></li>
+          <li><a class="hover:text-primary-700" href="#">Chính sách đổi trả</a></li>
+          <li><a class="hover:text-primary-700" href="#">Bảo mật</a></li>
+          <li><a class="hover:text-primary-700" href="#">Điều khoản</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Theo dõi</h4>
+        <div class="flex gap-3 text-slate-600">
+          <a class="p-2 rounded-xl hover:bg-primary-100" href="#" aria-label="Facebook"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+          <a class="p-2 rounded-xl hover:bg-primary-100" href="#" aria-label="Instagram"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+          <a class="p-2 rounded-xl hover:bg-primary-100" href="#" aria-label="TikTok"><i data-lucide="tiktok" class="w-5 h-5"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-primary-200 text-center text-sm text-slate-500 py-4">© 2025 SweetDay Cakes</div>
+  </footer>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed left-1/2 -translate-x-1/2 bottom-6 z-50 hidden">
+    <div class="rounded-2xl bg-slate-900 text-white px-4 py-3 text-sm shadow-xl flex items-center gap-2">
+      <i data-lucide="check-circle" class="w-4 h-4 text-mint"></i>
+      <span id="toastMsg">Đã thêm vào giỏ</span>
+    </div>
+  </div>
+
+  <script>
+    // Simple store using localStorage
+    const store = {
+      get(key){ try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; } },
+      set(key, val){ localStorage.setItem(key, JSON.stringify(val)); },
+      add(key, item){ const arr = this.get(key); arr.push(item); this.set(key, arr); return arr.length; }
+    };
+
+    function formatVND(n){
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(n);
+    }
+
+    function toast(msg){
+      const el = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      el.classList.remove('hidden');
+      setTimeout(()=> el.classList.add('hidden'), 1800);
+    }
+
+    function toggleMobileSearch(){
+      document.getElementById('mobileSearch').classList.toggle('hidden');
+    }
+
+    // Demo products
+    const products = [
+      { id: 'p1', name: 'Blue Dream – Kem việt quất 0.5kg', price: 280000, img: 'https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=1600&auto=format&fit=crop' },
+      { id: 'p2', name: 'Pastel Ocean – Màu xanh dương nhạt', price: 350000, img: 'https://images.unsplash.com/photo-1574085733277-851d9d856a3a?q=80&w=1600&auto=format&fit=crop' },
+      { id: 'p3', name: 'Candle Party – Nến & thiệp', price: 320000, img: 'https://images.unsplash.com/photo-1612206891338-6e1b9e46d0f6?q=80&w=1600&auto=format&fit=crop' },
+      { id: 'p4', name: 'Minimal Sky – Pastel nhẹ', price: 300000, img: 'https://images.unsplash.com/photo-1529694157877-54b4e1d443bb?q=80&w=1600&auto=format&fit=crop' },
+      { id: 'p5', name: 'Berry Breeze – Dâu xanh', price: 390000, img: 'https://images.unsplash.com/photo-1542826438-30f2f0b7a8c1?q=80&w=1600&auto=format&fit=crop' },
+      { id: 'p6', name: 'Ocean Wave – Fondant', price: 520000, img: 'https://images.unsplash.com/photo-1546397438-20d3be0cfe9a?q=80&w=1600&auto=format&fit=crop' },
+      { id: 'p7', name: 'Sky Cupcakes – set 6', price: 180000, img: 'https://images.unsplash.com/photo-1614707267537-084525f0b2a8?q=80&w=1600&auto=format&fit=crop' },
+      { id: 'p8', name: 'Cloud Nine – Kem phô mai', price: 450000, img: 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?q=80&w=1600&auto=format&fit=crop' }
+    ];
+
+    function renderProducts(){
+      const grid = document.getElementById('productGrid');
+      const tpl = document.getElementById('productCardTpl');
+      products.forEach(p => {
+        const node = tpl.content.cloneNode(true);
+        const img = node.querySelector('img');
+        const name = node.querySelector('h3');
+        const price = node.querySelector('[data-price]');
+        img.src = p.img; img.alt = p.name;
+        name.textContent = p.name;
+        price.textContent = formatVND(p.price);
+        node.querySelector('[data-btn-cart]').addEventListener('click', () => {
+          const count = store.add('cart', { id: p.id, qty: 1 });
+          document.getElementById('cartBadge').textContent = count; 
+          document.getElementById('cartBadge').classList.remove('hidden');
+          toast('Đã thêm vào giỏ: ' + p.name);
+        });
+        node.querySelector('[data-btn-wishlist]').addEventListener('click', (e) => {
+          const count = store.add('wishlist', { id: p.id });
+          document.getElementById('wishlistBadge').textContent = count; 
+          document.getElementById('wishlistBadge').classList.remove('hidden');
+          e.currentTarget.classList.add('bg-primary-600');
+          e.currentTarget.querySelector('i').classList.add('text-white');
+          toast('Đã thêm vào yêu thích');
+        });
+        grid.appendChild(node);
+      });
+    }
+
+    function restoreBadges(){
+      const c = store.get('cart').length; const w = store.get('wishlist').length;
+      if(c){ const b=document.getElementById('cartBadge'); b.textContent=c; b.classList.remove('hidden'); }
+      if(w){ const b=document.getElementById('wishlistBadge'); b.textContent=w; b.classList.remove('hidden'); }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderProducts();
+      restoreBadges();
+      if (window.lucide) window.lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

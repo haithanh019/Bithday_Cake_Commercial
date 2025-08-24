@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SweetDay Cakes | Đặt hàng thành công</title>
+  <meta name="description" content="Xác nhận đơn hàng, mã đơn, tóm tắt sản phẩm, địa chỉ giao, thời gian giao và bước tiếp theo." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { fontFamily: { sans: ["Plus Jakarta Sans","system-ui","-apple-system","Segoe UI","Roboto","Noto Sans","sans-serif"] }, colors: { primary: {50:'#EFF8FF',100:'#DBEDFF',200:'#BFE1FF',300:'#93CEFF',400:'#63B6FF',500:'#3BA0FF',600:'#2188EE',700:'#1A73D6',800:'#195CAB',900:'#154C8B'}, cream:'#FFF7F1', choco:'#6B4F4F', strawberry:'#FF6B6B', mint:'#B7F0E3' }, boxShadow:{ soft:'0 10px 25px -10px rgba(30,64,175,.25)'} } } }
+  </script>
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <style>html{scroll-behavior:smooth} :focus-visible{outline:2px solid #3BA0FF; outline-offset:2px} @media print{ .no-print{ display:none !important } }</style>
+</head>
+<body class="bg-primary-50 text-slate-800">
+  <!-- Header (simple) -->
+  <header class="no-print sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-primary-100">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <a href="index.html" class="flex items-center gap-2">
+        <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary-100 text-primary-700 shadow-soft"><i data-lucide="cake" class="w-5 h-5"></i></span>
+        <span class="text-lg font-extrabold text-primary-700">SweetDay</span>
+      </a>
+      <nav class="flex items-center gap-2">
+        <a href="shop.html" class="p-2 rounded-xl hover:bg-primary-100"><i data-lucide="store" class="w-5 h-5"></i></a>
+        <a href="cart.html" class="p-2 rounded-xl hover:bg-primary-100 relative"><i data-lucide="shopping-bag" class="w-5 h-5"></i></a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="container mx-auto px-4 py-8">
+    <div class="rounded-3xl border border-primary-200 bg-white overflow-hidden">
+      <!-- Hero -->
+      <div class="p-6 md:p-8 bg-gradient-to-br from-primary-50 to-white">
+        <div class="flex items-start justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-primary-700 shadow-soft">
+              <i data-lucide="check-circle" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900">Đặt hàng thành công!</h1>
+              <div class="mt-1 text-slate-600 text-sm">Cảm ơn bạn đã tin tưởng SweetDay. Chúng tôi đã gửi email/SMS xác nhận.</div>
+            </div>
+          </div>
+          <div class="no-print flex gap-2">
+            <button id="btnPrint" class="inline-flex items-center gap-2 rounded-2xl bg-white text-primary-700 ring-1 ring-primary-200 px-4 py-2 text-sm font-semibold hover:bg-primary-50"><i data-lucide="printer" class="w-4 h-4"></i> In hoá đơn</button>
+            <button id="btnShare" class="inline-flex items-center gap-2 rounded-2xl bg-primary-600 text-white px-4 py-2 text-sm font-semibold hover:bg-primary-700"><i data-lucide="share-2" class="w-4 h-4"></i> Chia sẻ</button>
+          </div>
+        </div>
+
+        <div class="mt-5 flex flex-wrap items-center gap-3">
+          <div class="text-sm text-slate-700">Mã đơn: <strong id="orderId" class="text-primary-700">—</strong></div>
+          <button id="btnCopy" class="no-print inline-flex items-center gap-1 text-xs rounded-full bg-primary-100 text-primary-700 px-2.5 py-1"><i data-lucide="copy" class="w-3.5 h-3.5"></i> Sao chép</button>
+          <span class="text-xs text-slate-500">Ngày tạo: <span id="orderDate">—</span></span>
+          <span class="text-xs text-slate-500">Trạng thái: <span id="orderStatus" class="px-2 py-0.5 rounded-full bg-primary-100 text-primary-700">Processing</span></span>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="p-6 md:p-8 grid lg:grid-cols-12 gap-6">
+        <!-- Left: Summary -->
+        <section class="lg:col-span-7">
+          <h2 class="text-lg font-bold text-slate-900">Tóm tắt đơn hàng</h2>
+          <div id="items" class="mt-3 space-y-3"></div>
+
+          <div class="mt-4 grid sm:grid-cols-2 gap-4 text-sm">
+            <div class="rounded-2xl border border-primary-200 p-3">
+              <div class="text-slate-500">Giao đến</div>
+              <div id="addr" class="mt-1 font-semibold text-slate-900"></div>
+              <div id="addr2" class="text-slate-600"></div>
+            </div>
+            <div class="rounded-2xl border border-primary-200 p-3">
+              <div class="text-slate-500">Thời gian giao</div>
+              <div id="delivery" class="mt-1 font-semibold text-slate-900"></div>
+              <div id="payment" class="text-slate-600"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Right: Totals & Next steps -->
+        <aside class="lg:col-span-5">
+          <div class="rounded-2xl border border-primary-200 p-4">
+            <h3 class="text-lg font-bold text-slate-900">Tổng tiền</h3>
+            <div class="mt-3 space-y-2 text-sm">
+              <div class="flex justify-between"><span>Tạm tính</span><span id="subtotal">0₫</span></div>
+              <div class="flex justify-between"><span>Giảm giá</span><span id="discount">-0₫</span></div>
+              <div class="flex justify-between"><span>Phí giao hàng</span><span id="shipping">0₫</span></div>
+              <div class="pt-2 border-t border-primary-200 flex justify-between font-extrabold text-slate-900"><span>Thành tiền</span><span id="total">0₫</span></div>
+            </div>
+            <div id="couponRow" class="mt-2 text-xs text-primary-700 hidden"></div>
+          </div>
+
+          <!-- Timeline -->
+          <div class="mt-4 rounded-2xl border border-primary-200 p-4">
+            <h3 class="text-lg font-bold text-slate-900">Trạng thái đơn</h3>
+            <ol id="timeline" class="mt-3 relative border-s border-primary-100 pl-5 text-sm">
+              <li class="mb-3"><span class="absolute -left-2 top-0 h-4 w-4 rounded-full bg-primary-600"></span> Đã nhận đơn</li>
+              <li class="mb-3"><span class="absolute -left-2 top-0 h-4 w-4 rounded-full bg-primary-300"></span> Đang chuẩn bị</li>
+              <li class="mb-3"><span class="absolute -left-2 top-0 h-4 w-4 rounded-full bg-primary-200"></span> Đang giao</li>
+              <li><span class="absolute -left-2 top-0 h-4 w-4 rounded-full bg-primary-100"></span> Hoàn tất</li>
+            </ol>
+            <div class="text-xs text-slate-500">* Bạn có thể theo dõi chi tiết hơn ở trang Tracking.</div>
+          </div>
+
+          <div class="no-print mt-4 grid sm:grid-cols-2 gap-3">
+            <a id="btnTrack" href="#" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary-600 text-white px-5 py-3 font-semibold hover:bg-primary-700"><i data-lucide="map" class="w-5 h-5"></i> Theo dõi đơn</a>
+            <a href="shop.html" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-white text-primary-700 ring-1 ring-primary-200 px-5 py-3 font-semibold hover:bg-primary-50"><i data-lucide="store" class="w-5 h-5"></i> Tiếp tục mua</a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="no-print border-t border-primary-200 bg-white">
+    <div class="container mx-auto px-4 py-8 text-sm text-slate-600 flex flex-wrap items-center justify-between gap-3">
+      <div>© 2025 SweetDay Cakes</div>
+      <div class="flex items-center gap-3">
+        <a class="hover:text-primary-700" href="#">Hỗ trợ</a>
+        <a class="hover:text-primary-700" href="#">Chính sách</a>
+      </div>
+    </div>
+  </footer>
+
+  <template id="tpl-item">
+    <div class="flex items-center gap-3">
+      <img class="w-14 h-14 object-cover rounded-xl ring-1 ring-primary-200" alt="Ảnh"/>
+      <div class="flex-1">
+        <div class="text-sm font-semibold text-slate-900" data-name></div>
+        <div class="text-xs text-slate-500" data-meta></div>
+      </div>
+      <div class="text-right text-sm">
+        <div class="font-bold text-primary-700" data-price></div>
+        <div class="text-xs text-slate-500" data-qty></div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    const $ = (s, r=document)=> r.querySelector(s);
+    const $$ = (s, r=document)=> Array.from(r.querySelectorAll(s));
+    const fmt = n => new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(n);
+
+    function getParam(name){ return new URLSearchParams(location.search).get(name); }
+
+    function findOrder(id){
+      const orders = JSON.parse(localStorage.getItem('orders')||'[]');
+      return orders.find(o=>o.id===id);
+    }
+
+    function fillOrder(o){
+      $('#orderId').textContent = o.id; $('#orderDate').textContent = new Date(o.createdAt).toLocaleString('vi-VN');
+      $('#orderStatus').textContent = o.status || 'Processing';
+
+      // items
+      const wrap = $('#items'); wrap.innerHTML='';
+      const tpl = $('#tpl-item');
+      (o.items||[]).forEach(it=>{
+        const node = tpl.content.cloneNode(true);
+        const img = node.querySelector('img'); img.src = it.img || 'https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=800&auto=format&fit=crop'; img.alt = it.name||'Bánh';
+        node.querySelector('[data-name]').textContent = it.name || (it.type==='custom' ? 'Bánh thiết kế theo yêu cầu' : 'Bánh sinh nhật');
+        const meta = [];
+        if(it.size) meta.push(typeof it.size==='string' && it.size.startsWith('s')? (it.size==='s05'?'0.5kg': it.size==='s1'?'1kg':'2kg') : it.size);
+        if(it.flavor) meta.push(it.flavor==='vietquat'?'Việt quất': it.flavor==='dau'?'Dâu': it.flavor==='matcha'?'Matcha': it.flavor);
+        if(it.vegan) meta.push('Vegan'); if(it.gf) meta.push('Không gluten');
+        if(it.msg) meta.push(`"${it.msg}"`);
+        if(it.date && it.time) meta.push(`${it.date} • ${it.time}`);
+        node.querySelector('[data-meta]').textContent = meta.join(' • ');
+        const price = (it.qty||1) * (it.price || 300000);
+        node.querySelector('[data-price]').textContent = fmt(price);
+        node.querySelector('[data-qty]').textContent = `x${it.qty||1}`;
+        wrap.appendChild(node);
+      });
+
+      // address & delivery
+      const a=o.address||{}, d=o.delivery||{};
+      $('#addr').textContent = a.line || '';
+      $('#addr2').textContent = [a.district,a.city,a.zipcode].filter(Boolean).join(', ');
+      $('#delivery').textContent = [d.date,d.time].filter(Boolean).join(' • ');
+      $('#payment').textContent = 'Thanh toán: ' + (o.payment==='bank'?'Chuyển khoản':'Thanh toán khi nhận (COD)');
+
+      // totals
+      const am = o.amounts || {subtotal:0,discount:0,shipping:0,total:0};
+      $('#subtotal').textContent = fmt(am.subtotal);
+      $('#discount').textContent = '-' + fmt(am.discount||0);
+      $('#shipping').textContent = fmt(am.shipping||0);
+      $('#total').textContent = fmt(am.total||0);
+      if(o.coupon) { const row=document.getElementById('couponRow'); row.textContent = `Áp dụng mã: ${o.coupon}`; row.classList.remove('hidden'); }
+
+      // tracking link
+      const url = `order-tracking.html?id=${encodeURIComponent(o.id)}`;
+      $('#btnTrack').href = url;
+    }
+
+    function fallback(){
+      // When arrive without order in storage, show generic block
+      $('#orderId').textContent = 'SD-—';
+      $('#orderDate').textContent = new Date().toLocaleString('vi-VN');
+      $('#items').innerHTML = '<div class="text-sm text-slate-600">Không tìm thấy thông tin đơn. Có thể bạn đã xoá lịch sử trình duyệt hoặc vào trang này trực tiếp.</div>';
+      $('#addr').textContent = '—'; $('#addr2').textContent='—'; $('#delivery').textContent='—';
+      $('#subtotal').textContent = '0₫'; $('#discount').textContent='-0₫'; $('#shipping').textContent='0₫'; $('#total').textContent='0₫';
+      $('#btnTrack').href = 'order-tracking.html';
+    }
+
+    function bindUX(){
+      document.getElementById('btnPrint').addEventListener('click', ()=> window.print());
+      document.getElementById('btnCopy').addEventListener('click', ()=>{
+        const id = document.getElementById('orderId').textContent.trim(); navigator.clipboard.writeText(id).then(()=>{
+          const b = document.getElementById('btnCopy'); b.textContent='Đã sao chép'; setTimeout(()=> b.innerHTML='<i data-lucide="copy" class="w-3.5 h-3.5"></i> Sao chép', 1200);
+        });
+      });
+      document.getElementById('btnShare').addEventListener('click', async ()=>{
+        const id = document.getElementById('orderId').textContent.trim();
+        const shareData = { title:'Đơn hàng SweetDay', text:`Mã đơn ${id} – theo dõi tại SweetDay.`, url: location.href };
+        if(navigator.share){ try{ await navigator.share(shareData);}catch{} } else { alert('Trình duyệt của bạn chưa hỗ trợ chia sẻ. Hãy sao chép mã đơn.'); }
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', ()=>{
+      if(window.lucide) window.lucide.createIcons();
+      bindUX();
+      const id = getParam('id');
+      const order = id? findOrder(id) : null;
+      if(order) fillOrder(order); else fallback();
+    });
+  </script>
+</body>
+</html>

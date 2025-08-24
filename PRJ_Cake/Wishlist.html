@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SweetDay Cakes | Wishlist</title>
+  <meta name="description" content="Danh sách bánh yêu thích: lưu, lọc, sắp xếp, thêm vào giỏ hàng hoặc xoá." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { fontFamily: { sans: ["Plus Jakarta Sans","system-ui","-apple-system","Segoe UI","Roboto","Noto Sans","sans-serif"] }, colors: { primary: {50:'#EFF8FF',100:'#DBEDFF',200:'#BFE1FF',300:'#93CEFF',400:'#63B6FF',500:'#3BA0FF',600:'#2188EE',700:'#1A73D6',800:'#195CAB',900:'#154C8B'}, cream:'#FFF7F1', choco:'#6B4F4F', strawberry:'#FF6B6B', mint:'#B7F0E3' }, boxShadow:{ soft:'0 10px 25px -10px rgba(30,64,175,.25)'} } } }
+  </script>
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <style>html{scroll-behavior:smooth} :focus-visible{outline:2px solid #3BA0FF; outline-offset:2px}</style>
+</head>
+<body class="bg-primary-50 text-slate-800">
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-primary-100">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <a href="account.html" class="flex items-center gap-2">
+        <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary-100 text-primary-700 shadow-soft"><i data-lucide="heart" class="w-5 h-5"></i></span>
+        <span class="text-lg font-extrabold text-primary-700">Wishlist</span>
+      </a>
+      <nav class="flex items-center gap-2">
+        <a href="shop.html" class="p-2 rounded-xl hover:bg-primary-100"><i data-lucide="store" class="w-5 h-5"></i></a>
+        <a href="cart.html" class="p-2 rounded-xl hover:bg-primary-100 relative"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span id="cartBadge" class="absolute -top-1 -right-1 text-[10px] bg-primary-600 text-white rounded-full px-1.5 py-0.5 hidden">0</span></a>
+      </nav>
+    </div>
+    <div class="container mx-auto px-4 pb-3 text-sm text-slate-600">
+      <a class="hover:text-primary-700" href="index.html">Trang chủ</a> <span class="mx-1">›</span>
+      <a class="hover:text-primary-700" href="account.html">Tài khoản</a> <span class="mx-1">›</span>
+      <span class="text-slate-500">Wishlist</span>
+    </div>
+  </header>
+
+  <!-- Controls -->
+  <section class="container mx-auto px-4 pt-6">
+    <div class="rounded-3xl border border-primary-200 bg-white p-4 md:p-6">
+      <div class="flex flex-wrap items-center gap-2">
+        <div class="relative">
+          <i data-lucide="search" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
+          <input id="q" type="text" placeholder="Tìm theo tên/ghi chú" class="pl-9 rounded-2xl border border-primary-200 px-3 py-2 text-sm w-64"/>
+        </div>
+        <select id="fltFlavor" class="rounded-2xl border border-primary-200 px-3 py-2 text-sm">
+          <option value="">Tất cả hương vị</option>
+          <option value="dau">Dâu</option>
+          <option value="socola">Sô cô la</option>
+          <option value="matcha">Matcha</option>
+          <option value="vietquat">Việt quất</option>
+        </select>
+        <select id="fltSize" class="rounded-2xl border border-primary-200 px-3 py-2 text-sm">
+          <option value="">Tất cả size</option>
+          <option value="s05">0.5kg</option>
+          <option value="s1">1kg</option>
+          <option value="s2">2kg</option>
+        </select>
+        <select id="sort" class="rounded-2xl border border-primary-200 px-3 py-2 text-sm">
+          <option value="new">Mới thêm</option>
+          <option value="priceUp">Giá tăng dần</option>
+          <option value="priceDown">Giá giảm dần</option>
+          <option value="name">Tên A→Z</option>
+        </select>
+        <div class="ml-auto flex items-center gap-2">
+          <button id="btnShare" class="rounded-2xl bg-white text-primary-700 ring-1 ring-primary-200 px-3 py-2 text-sm"><i data-lucide="share-2" class="w-4 h-4"></i> Chia sẻ</button>
+          <button id="btnMoveAll" class="rounded-2xl bg-primary-600 text-white px-3 py-2 text-sm font-semibold hover:bg-primary-700"><i data-lucide="shopping-cart" class="w-4 h-4"></i> Thêm tất cả vào giỏ</button>
+          <button id="btnClear" class="rounded-2xl bg-white text-strawberry ring-1 ring-strawberry/30 px-3 py-2 text-sm hover:bg-strawberry/10"><i data-lucide="trash-2" class="w-4 h-4"></i> Xoá hết</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main -->
+  <main class="container mx-auto px-4 py-6 md:py-8">
+    <div id="empty" class="hidden rounded-3xl border border-primary-200 bg-white p-10 text-center">
+      <i data-lucide="heart" class="w-10 h-10 mx-auto text-primary-600"></i>
+      <h2 class="mt-3 text-2xl font-extrabold text-slate-900">Chưa có sản phẩm yêu thích</h2>
+      <p class="mt-1 text-slate-600">Hãy thêm vài chiếc bánh vào wishlist để lưu lại cho dịp đặc biệt.</p>
+      <a href="shop.html" class="inline-flex items-center gap-2 mt-5 rounded-2xl bg-primary-600 text-white px-5 py-3 font-semibold hover:bg-primary-700">Khám phá cửa hàng</a>
+    </div>
+
+    <div id="grid" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+  </main>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed left-1/2 -translate-x-1/2 bottom-6 z-50 hidden">
+    <div class="rounded-2xl bg-slate-900 text-white px-4 py-3 text-sm shadow-xl flex items-center gap-2">
+      <i data-lucide="check-circle" class="w-4 h-4 text-mint"></i>
+      <span id="toastMsg">Đã cập nhật</span>
+    </div>
+  </div>
+
+  <template id="tpl-card">
+    <div class="group rounded-3xl border border-primary-200 bg-white overflow-hidden flex flex-col">
+      <a class="relative block" data-link>
+        <img class="w-full aspect-square object-cover" alt="Bánh"/>
+        <div class="absolute left-2 top-2 text-[11px] px-2 py-0.5 rounded-full bg-primary-100 text-primary-700" data-badge></div>
+        <button class="absolute right-2 top-2 p-2 rounded-xl bg-white/90 hover:bg-white shadow ring-1 ring-primary-200" data-remove title="Xoá khỏi wishlist"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </a>
+      <div class="p-3 flex-1 flex flex-col">
+        <div class="font-semibold text-slate-900 leading-tight" data-name></div>
+        <div class="mt-1 text-xs text-slate-500 min-h-[1rem]" data-meta></div>
+        <div class="mt-2 font-bold text-primary-700" data-price></div>
+        <div class="mt-auto flex items-center gap-2 pt-3">
+          <button class="flex-1 rounded-2xl bg-primary-600 text-white px-3 py-2 text-sm font-semibold hover:bg-primary-700" data-add><i data-lucide="shopping-bag" class="w-4 h-4"></i> Thêm vào giỏ</button>
+          <a class="rounded-2xl bg-white text-primary-700 ring-1 ring-primary-200 px-3 py-2 text-sm font-semibold hover:bg-primary-50" data-link>Xem</a>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    const $ = (s, r=document)=> r.querySelector(s);
+    const $$ = (s, r=document)=> Array.from(r.querySelectorAll(s));
+    const fmt = n => new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(n);
+    const toast = (m)=>{ $('#toastMsg').textContent=m; $('#toast').classList.remove('hidden'); setTimeout(()=>$('#toast').classList.add('hidden'),1200); };
+
+    function get(k){ try{return JSON.parse(localStorage.getItem(k)||'[]');}catch{return [];} }
+    function set(k,v){ localStorage.setItem(k, JSON.stringify(v)); }
+
+    function setCartBadge(){ const c=get('cart').length; if(c){ const b=$('#cartBadge'); b.textContent=c; b.classList.remove('hidden'); } }
+
+    // Price computation (same logic as cart/checkout)
+    function lineBasePrice(item){
+      if(item.price) return item.price;
+      if(item.name && item.size){
+        const sizeMap = { 's05':1, '0.5kg':1, 's1':1.35, '1kg':1.35, 's2':2.2, '2kg':2.2 };
+        const base = 280000; let price = Math.round(base * (sizeMap[item.size] || 1));
+        if(item.vegan) price += 20000; if(item.gf) price += 15000; return price;
+      }
+      return 300000;
+    }
+
+    const state = { all: [], view: [] };
+
+    function init(){
+      setCartBadge();
+      bindUI();
+      load();
+      if(window.lucide) window.lucide.createIcons();
+    }
+
+    function bindUI(){
+      $('#q').addEventListener('input', applyFilters);
+      $('#fltFlavor').addEventListener('change', applyFilters);
+      $('#fltSize').addEventListener('change', applyFilters);
+      $('#sort').addEventListener('change', applyFilters);
+      $('#btnClear').addEventListener('click', ()=>{ if(confirm('Xoá toàn bộ wishlist?')){ set('wishlist',[]); load(); toast('Đã xoá wishlist'); }});
+      $('#btnMoveAll').addEventListener('click', moveAllToCart);
+      $('#btnShare').addEventListener('click', shareList);
+    }
+
+    function load(){
+      state.all = get('wishlist');
+      applyFilters();
+    }
+
+    function applyFilters(){
+      const q = ($('#q').value||'').toLowerCase();
+      const flv = $('#fltFlavor').value; const size = $('#fltSize').value; const sort = $('#sort').value;
+      state.view = state.all.filter(it=>{
+        const name = (it.name||'').toLowerCase(); const note = (it.msg||'').toLowerCase();
+        const okQ = !q || name.includes(q) || note.includes(q);
+        const okF = !flv || (it.flavor===flv);
+        const okS = !size || (it.size===size);
+        return okQ && okF && okS;
+      });
+      if(sort==='priceUp') state.view.sort((a,b)=> lineBasePrice(a)-lineBasePrice(b));
+      else if(sort==='priceDown') state.view.sort((a,b)=> lineBasePrice(b)-lineBasePrice(a));
+      else if(sort==='name') state.view.sort((a,b)=> (a.name||'').localeCompare(b.name||''));
+      else state.view.sort((a,b)=> (b._ts||0)-(a._ts||0)); // new
+      render();
+    }
+
+    function render(){
+      const grid = $('#grid'); grid.innerHTML='';
+      const empty = $('#empty');
+      if(state.view.length===0){ empty.classList.remove('hidden'); } else { empty.classList.add('hidden'); }
+      const tpl = $('#tpl-card');
+      state.view.forEach((it, idx)=>{
+        const node = tpl.content.cloneNode(true);
+        const img = node.querySelector('img'); img.src = it.img || 'https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=800&auto=format&fit=crop'; img.alt = it.name||'Bánh';
+        node.querySelector('[data-badge]').textContent = it.type==='custom'? 'Custom' : (it.category||'Cake');
+        node.querySelector('[data-name]').textContent = it.name || (it.type==='custom'? 'Bánh theo yêu cầu' : 'Bánh sinh nhật');
+        const meta = [];
+        if(it.size) meta.push(it.size==='s05'?'0.5kg': it.size==='s1'?'1kg': it.size==='s2'?'2kg': it.size);
+        if(it.flavor) meta.push(it.flavor==='vietquat'?'Việt quất': it.flavor==='dau'?'Dâu': it.flavor);
+        if(it.vegan) meta.push('Vegan'); if(it.gf) meta.push('Không gluten');
+        if(it.msg) meta.push(`"${it.msg}"`);
+        node.querySelector('[data-meta]').textContent = meta.join(' • ');
+        node.querySelector('[data-price]').textContent = fmt(lineBasePrice(it));
+
+        // actions
+        node.querySelector('[data-add]').addEventListener('click', ()=> addToCart(it));
+        node.querySelector('[data-remove]').addEventListener('click', ()=> removeItem(idx));
+        node.querySelectorAll('[data-link]').forEach(a=> a.addEventListener('click', (e)=>{ e.preventDefault(); const id=it.slug||it.id||''; const url = it.type==='custom'? 'custom-cake-builder.html' : (id? `product.html?id=${encodeURIComponent(id)}` : '#'); if(url!=='#') location.href=url; }));
+
+        grid.appendChild(node);
+      });
+      if(window.lucide) window.lucide.createIcons();
+    }
+
+    function removeItem(viewIndex){
+      // Find actual item in state.all by identity
+      const item = state.view[viewIndex]; const idx = state.all.findIndex(x=> JSON.stringify(x)===JSON.stringify(item));
+      if(idx>-1){ state.all.splice(idx,1); set('wishlist', state.all); applyFilters(); toast('Đã xoá khỏi wishlist'); }
+    }
+
+    function addToCart(item){
+      const cart = get('cart');
+      const toAdd = { ...item, qty: item.qty||1 };
+      cart.push(toAdd); set('cart', cart);
+      setCartBadge(); toast('Đã thêm vào giỏ');
+    }
+
+    function moveAllToCart(){
+      const list = get('wishlist'); if(list.length===0){ toast('Wishlist trống'); return; }
+      const cart = get('cart'); list.forEach(it=> cart.push({ ...it, qty: it.qty||1 })); set('cart',cart); set('wishlist',[]);
+      load(); setCartBadge(); toast('Đã chuyển toàn bộ vào giỏ');
+    }
+
+    function shareList(){
+      const count = get('wishlist').length;
+      const text = count? `Wishlist SweetDay của tôi (${count} món)`: 'Wishlist SweetDay của tôi';
+      const data = { title:'Wishlist SweetDay', text, url: location.href };
+      if(navigator.share){ navigator.share(data).catch(()=>{}); } else { navigator.clipboard.writeText(`${text} – ${location.href}`); toast('Đã sao chép liên kết'); }
+    }
+
+    // Demo: helper to add from shop/product (call localStorage push with timestamp)
+    // When saving elsewhere, put _ts=Date.now() for proper sorting
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

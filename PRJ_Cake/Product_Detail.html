@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SweetDay Cakes | Chi tiết sản phẩm</title>
+  <meta name="description" content="Chi tiết bánh sinh nhật: chọn kích thước, hương vị, ghi lời chúc, thời gian giao hàng và thêm vào giỏ." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Plus Jakarta Sans","system-ui","-apple-system","Segoe UI","Roboto","Noto Sans","sans-serif"] },
+          colors: {
+            primary: {50:'#EFF8FF',100:'#DBEDFF',200:'#BFE1FF',300:'#93CEFF',400:'#63B6FF',500:'#3BA0FF',600:'#2188EE',700:'#1A73D6',800:'#195CAB',900:'#154C8B'},
+            cream:'#FFF7F1', choco:'#6B4F4F', strawberry:'#FF6B6B', mint:'#B7F0E3'
+          },
+          boxShadow:{ soft:'0 10px 25px -10px rgba(30,64,175,.25)' }
+        }
+      }
+    }
+  </script>
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <style>html{scroll-behavior:smooth} :focus-visible{outline:2px solid #3BA0FF; outline-offset:2px}</style>
+</head>
+<body class="bg-primary-50 text-slate-800">
+  <!-- Announcement -->
+  <div class="bg-primary-600 text-white text-sm">
+    <div class="container mx-auto px-4 py-2 flex items-center justify-between">
+      <p class="truncate">🎂 Đặt trước 3h để giao trong ngày (Nội thành)</p>
+      <a href="#delivery" class="underline hidden sm:block">Khung giờ giao</a>
+    </div>
+  </div>
+
+  <!-- Header (simple) -->
+  <header class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-primary-100">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <a href="index.html" class="flex items-center gap-2">
+        <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary-100 text-primary-700 shadow-soft"><i data-lucide="cake" class="w-5 h-5"></i></span>
+        <span class="text-lg font-extrabold text-primary-700">SweetDay</span>
+      </a>
+      <div class="hidden md:flex flex-1 max-w-xl">
+        <label class="relative w-full">
+          <input id="q" type="text" placeholder="Tìm sản phẩm…" class="w-full rounded-2xl border border-primary-200 bg-white/70 py-2.5 pl-10 pr-4 text-sm placeholder-slate-400 focus:border-primary-400 focus:ring-2 focus:ring-primary-200" />
+          <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+        </label>
+      </div>
+      <nav class="flex items-center gap-2">
+        <a href="shop.html" class="p-2 rounded-xl hover:bg-primary-100"><i data-lucide="store" class="w-5 h-5"></i></a>
+        <a href="#" class="p-2 rounded-xl hover:bg-primary-100 relative"><i data-lucide="heart" class="w-5 h-5"></i><span id="wishlistBadge" class="absolute -top-1 -right-1 text-[10px] bg-strawberry text-white rounded-full px-1.5 py-0.5 hidden">0</span></a>
+        <a href="#" class="p-2 rounded-xl hover:bg-primary-100 relative"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span id="cartBadge" class="absolute -top-1 -right-1 text-[10px] bg-primary-600 text-white rounded-full px-1.5 py-0.5 hidden">0</span></a>
+      </nav>
+    </div>
+    <div class="container mx-auto px-4 pb-3 text-sm text-slate-600">
+      <a class="hover:text-primary-700" href="index.html">Trang chủ</a> <span class="mx-1">›</span>
+      <a class="hover:text-primary-700" href="shop.html">Shop</a> <span class="mx-1">›</span>
+      <span class="text-slate-500" id="bcName">Sản phẩm</span>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="container mx-auto px-4 py-6 md:py-8 grid lg:grid-cols-12 gap-6">
+    <!-- Gallery -->
+    <section class="lg:col-span-6">
+      <div class="rounded-3xl border border-primary-200 bg-white p-3 md:p-4">
+        <div class="relative">
+          <img id="mainImg" class="w-full aspect-[4/3] object-cover rounded-2xl" alt="Ảnh sản phẩm" />
+          <button id="zoomBtn" class="absolute bottom-3 right-3 p-2 rounded-xl bg-white/90 hover:bg-white shadow"><i data-lucide="maximize-2" class="w-4 h-4"></i></button>
+          <span id="badgeSale" class="hidden absolute left-3 top-3 text-[11px] font-bold bg-strawberry text-white px-2 py-1 rounded-full">SALE</span>
+        </div>
+        <div id="thumbs" class="mt-3 grid grid-cols-5 gap-2"></div>
+      </div>
+      <div id="delivery" class="mt-4 rounded-2xl border border-primary-200 bg-white p-4 flex items-center gap-3 text-sm text-slate-700">
+        <i data-lucide="truck" class="w-5 h-5 text-primary-600"></i>
+        <div>
+          <div><strong>Giao nhanh 2–4 giờ</strong> (nội thành TP.HCM)</div>
+          <div class="text-slate-500">Miễn phí cho đơn từ 350.000₫</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Info & Options -->
+    <section class="lg:col-span-6">
+      <div class="rounded-3xl border border-primary-200 bg-white p-4 md:p-6">
+        <h1 id="pName" class="text-2xl md:text-3xl font-extrabold text-slate-900"></h1>
+        <div class="mt-1 flex items-center gap-2 text-amber-400" id="rating"></div>
+        <div class="mt-2 flex items-center gap-2">
+          <div id="price" class="text-2xl font-extrabold text-primary-700"></div>
+          <div id="oldPrice" class="text-slate-400 line-through"></div>
+          <span id="stock" class="ml-2 text-xs px-2 py-1 rounded-full bg-primary-100 text-primary-700">Còn hàng</span>
+        </div>
+
+        <p id="pDesc" class="mt-3 text-slate-700"></p>
+
+        <!-- Variants -->
+        <div class="mt-4 grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-900 mb-1">Kích thước</label>
+            <div id="sizes" class="flex flex-wrap gap-2"></div>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-900 mb-1">Hương vị</label>
+            <div id="flavors" class="flex flex-wrap gap-2"></div>
+          </div>
+        </div>
+
+        <!-- Custom text -->
+        <div class="mt-4">
+          <label class="block text-sm font-semibold text-slate-900">Lời chúc in lên bánh (tối đa 30 ký tự)</label>
+          <input id="msg" maxlength="30" type="text" placeholder="VD: Chúc mừng sinh nhật Minh Anh!" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm focus:ring-2 focus:ring-primary-200" />
+          <div class="mt-2 text-xs text-slate-500">Xem trước: <span id="msgPreview" class="font-semibold text-primary-700"></span></div>
+        </div>
+
+        <!-- Delivery time -->
+        <div class="mt-4 grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-900">Ngày giao</label>
+            <input id="date" type="date" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-900">Giờ giao</label>
+            <select id="time" class="mt-1 w-full rounded-2xl border border-primary-200 px-4 py-3 text-sm"></select>
+          </div>
+        </div>
+
+        <!-- Allergens & options -->
+        <div class="mt-4 grid sm:grid-cols-2 gap-4">
+          <label class="inline-flex items-center gap-2 text-sm text-slate-700"><input id="optVegan" type="checkbox" class="rounded"> Vegan</label>
+          <label class="inline-flex items-center gap-2 text-sm text-slate-700"><input id="optGF" type="checkbox" class="rounded"> Không gluten</label>
+        </div>
+
+        <!-- Actions -->
+        <div class="mt-6 flex flex-wrap items-center gap-3">
+          <button id="addToCart" class="inline-flex items-center gap-2 rounded-2xl bg-primary-600 text-white px-5 py-3 font-semibold hover:bg-primary-700">
+            <i data-lucide="shopping-cart" class="w-5 h-5"></i> Thêm vào giỏ
+          </button>
+          <button id="addToWishlist" class="inline-flex items-center gap-2 rounded-2xl bg-white text-primary-700 ring-1 ring-primary-200 px-5 py-3 font-semibold hover:bg-primary-50">
+            <i data-lucide="heart" class="w-5 h-5"></i> Yêu thích
+          </button>
+          <div class="text-xs text-slate-500">Thanh toán COD hoặc chuyển khoản</div>
+        </div>
+
+        <!-- Safety -->
+        <div class="mt-6 grid sm:grid-cols-3 gap-3 text-sm text-slate-700">
+          <div class="flex items-center gap-2"><i data-lucide="badge-check" class="w-4 h-4 text-primary-600"></i>VSATTP</div>
+          <div class="flex items-center gap-2"><i data-lucide="snowflake" class="w-4 h-4 text-primary-600"></i>Bảo quản 0–4°C</div>
+          <div class="flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-primary-600"></i>HSD 48h</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="mt-4 rounded-3xl border border-primary-200 bg-white">
+        <div class="px-4 pt-4 flex gap-2">
+          <button class="tab-btn px-4 py-2 rounded-xl text-sm font-semibold bg-primary-600 text-white" data-tab="desc">Mô tả</button>
+          <button class="tab-btn px-4 py-2 rounded-xl text-sm font-semibold hover:bg-primary-100" data-tab="spec">Thành phần</button>
+          <button class="tab-btn px-4 py-2 rounded-xl text-sm font-semibold hover:bg-primary-100" data-tab="reviews">Đánh giá (3)</button>
+        </div>
+        <div class="p-4">
+          <div id="tab-desc" class="tab-panel">
+            <p class="text-slate-700">Blue Dream là mẫu bánh tone xanh dương nhạt với kem việt quất thanh nhẹ, phù hợp sinh nhật tối giản. Có tuỳ chọn vegan/không gluten.</p>
+          </div>
+          <div id="tab-spec" class="tab-panel hidden">
+            <ul class="list-disc pl-5 text-slate-700 text-sm space-y-1">
+              <li>Cốt bánh: Vanilla hoặc Chocolate</li>
+              <li>Kem: Whipping cream hoặc Cream cheese</li>
+              <li>Nhân: Việt quất/Dâu/Matcha</li>
+              <li>Phụ kiện: Nến, thiệp viết tay</li>
+            </ul>
+          </div>
+          <div id="tab-reviews" class="tab-panel hidden">
+            <div class="space-y-4">
+              <article class="border border-primary-200 rounded-2xl p-4">
+                <div class="flex items-center gap-2 text-amber-400"><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star-half" class="w-4 h-4"></i></div>
+                <p class="mt-2 text-sm text-slate-700">Kem nhẹ, không ngọt gắt. Giao đúng giờ.</p>
+                <div class="mt-1 text-xs text-slate-500">— Ngọc Anh, 12/07/2025</div>
+              </article>
+              <article class="border border-primary-200 rounded-2xl p-4">
+                <div class="flex items-center gap-2 text-amber-400"><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4"></i></div>
+                <p class="mt-2 text-sm text-slate-700">Màu pastel lên ảnh rất đẹp, đúng concept.</p>
+                <div class="mt-1 text-xs text-slate-500">— Minh Phúc, 28/07/2025</div>
+              </article>
+              <article class="border border-primary-200 rounded-2xl p-4">
+                <div class="flex items-center gap-2 text-amber-400"><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4"></i></div>
+                <p class="mt-2 text-sm text-slate-700">Thiệp viết tay xinh, bé rất thích.</p>
+                <div class="mt-1 text-xs text-slate-500">— Thuỳ Linh, 03/08/2025</div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Related -->
+      <section class="mt-6">
+        <h2 class="text-xl font-bold text-slate-900 mb-3">Sản phẩm liên quan</h2>
+        <div id="related" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      </section>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-primary-200 bg-white">
+    <div class="container mx-auto px-4 py-8 text-sm text-slate-600 flex flex-wrap items-center justify-between gap-3">
+      <div>© 2025 SweetDay Cakes</div>
+      <div class="flex items-center gap-3">
+        <a class="hover:text-primary-700" href="#">Giao hàng</a>
+        <a class="hover:text-primary-700" href="#">Đổi trả</a>
+        <a class="hover:text-primary-700" href="#">Bảo mật</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-slate-900/70"></div>
+    <img id="lbImg" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[92vw] max-h-[88vh] rounded-2xl shadow-2xl" alt="Zoom ảnh" />
+    <button onclick="closeLB()" class="absolute top-5 right-5 p-2 rounded-xl bg-white/90 hover:bg-white shadow"><i data-lucide="x" class="w-5 h-5"></i></button>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed left-1/2 -translate-x-1/2 bottom-6 z-50 hidden">
+    <div class="rounded-2xl bg-slate-900 text-white px-4 py-3 text-sm shadow-xl flex items-center gap-2">
+      <i data-lucide="check-circle" class="w-4 h-4 text-mint"></i>
+      <span id="toastMsg">Đã thêm vào giỏ</span>
+    </div>
+  </div>
+
+  <script>
+    const $ = (s, r=document)=> r.querySelector(s);
+    const $$ = (s, r=document)=> Array.from(r.querySelectorAll(s));
+    const fmt = n => new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(n);
+    const toast = (m)=>{ $('#toastMsg').textContent=m; $('#toast').classList.remove('hidden'); setTimeout(()=>$('#toast').classList.add('hidden'),1600); };
+
+    const store = { get(k){ try{ return JSON.parse(localStorage.getItem(k)||'[]'); }catch{ return []; } }, set(k,v){ localStorage.setItem(k, JSON.stringify(v)); }, add(k,item){ const a=this.get(k); a.push(item); this.set(k,a); return a.length; } };
+
+    // Demo product (could be passed via URL later)
+    const PRODUCT = {
+      id:'p1',
+      name:'Blue Dream – Kem việt quất',
+      desc:'Tone xanh dương nhạt, kem việt quất thanh nhẹ. Phù hợp 2–10 người tuỳ size.',
+      basePrice:280000,
+      rating:4.6,
+      sale:true,
+      images:[
+        'https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=1600&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1574085733277-851d9d856a3a?q=80&w=1600&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1606313564200-e75d5e30476a?q=80&w=1600&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1529694157877-54b4e1d443bb?q=80&w=1600&auto=format&fit=crop'
+      ],
+      sizes:[
+        {id:'s05', label:'0.5kg', factor:1, meta:'2–4 người'},
+        {id:'s1', label:'1kg', factor:1.35, meta:'6–10 người'},
+        {id:'s2', label:'2kg', factor:2.2, meta:'10–16 người'}
+      ],
+      flavors:[
+        {id:'vietquat', label:'Việt quất'},
+        {id:'dau', label:'Dâu'},
+        {id:'matcha', label:'Matcha'}
+      ],
+      vegan:true,
+      glutenFree:true
+    };
+
+    const RELATED = [
+      {id:'p4', name:'Minimal Sky – Pastel nhẹ 0.5kg', price:300000, img:'https://images.unsplash.com/photo-1529694157877-54b4e1d443bb?q=80&w=1600&auto=format&fit=crop'},
+      {id:'p7', name:'Sky Cupcakes – Set 6', price:180000, img:'https://images.unsplash.com/photo-1614707267537-084525f0b2a8?q=80&w=1600&auto=format&fit=crop'},
+      {id:'p8', name:'Cloud Nine – Kem phô mai 1kg', price:450000, img:'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?q=80&w=1600&auto=format&fit=crop'}
+    ];
+
+    const state = { size: PRODUCT.sizes[0].id, flavor: PRODUCT.flavors[0].id, vegan:false, gf:false, msg:'', date:'', time:'' };
+
+    function init(){
+      // Fill base
+      $('#pName').textContent = PRODUCT.name; $('#pDesc').textContent = PRODUCT.desc; $('#bcName').textContent = PRODUCT.name;
+      renderRating(PRODUCT.rating);
+      renderImages();
+      renderSizes();
+      renderFlavors();
+      updatePrice();
+      renderTimes();
+      renderRelated();
+      if(PRODUCT.sale) $('#badgeSale').classList.remove('hidden');
+      if(PRODUCT.vegan) $('#optVegan').parentElement.insertAdjacentHTML('beforeend', '<span class="text-xs text-slate-500">(có thể làm)</span>');
+      if(PRODUCT.glutenFree) $('#optGF').parentElement.insertAdjacentHTML('beforeend', '<span class="text-xs text-slate-500">(có thể làm)</span>');
+
+      // Inputs
+      $('#msg').addEventListener('input', e=>{ state.msg = e.target.value; $('#msgPreview').textContent = state.msg; });
+      $('#optVegan').addEventListener('change', e=>{ state.vegan = e.target.checked; updatePrice(); });
+      $('#optGF').addEventListener('change', e=>{ state.gf = e.target.checked; updatePrice(); });
+      $('#date').addEventListener('change', e=> state.date = e.target.value );
+      $('#time').addEventListener('change', e=> state.time = e.target.value );
+      $('#addToCart').addEventListener('click', addToCart);
+      $('#addToWishlist').addEventListener('click', ()=>{ const w=store.add('wishlist',{id:PRODUCT.id, size:state.size, flavor:state.flavor}); const b=$('#wishlistBadge'); b.textContent=w; b.classList.remove('hidden'); toast('Đã thêm vào yêu thích'); });
+      $('#zoomBtn').addEventListener('click', ()=> openLB($('#mainImg').src));
+
+      // Restore badges
+      const c=store.get('cart').length, w=store.get('wishlist').length; if(c){ const b=$('#cartBadge'); b.textContent=c; b.classList.remove('hidden'); } if(w){ const b=$('#wishlistBadge'); b.textContent=w; b.classList.remove('hidden'); }
+      if(window.lucide) window.lucide.createIcons();
+    }
+
+    function renderRating(r){
+      const el = $('#rating'); el.innerHTML='';
+      const full = Math.floor(r), half = r-full>=0.5;
+      for(let i=0;i<full;i++){ const s=document.createElement('i'); s.setAttribute('data-lucide','star'); s.className='w-4 h-4 fill-current'; el.appendChild(s); }
+      if(half){ const s=document.createElement('i'); s.setAttribute('data-lucide','star-half'); s.className='w-4 h-4'; el.appendChild(s); }
+      for(let i=full+(half?1:0); i<5; i++){ const s=document.createElement('i'); s.setAttribute('data-lucide','star'); s.className='w-4 h-4'; el.appendChild(s); }
+      const label=document.createElement('span'); label.className='ml-1 text-sm text-slate-600'; label.textContent=r.toFixed(1); el.appendChild(label);
+    }
+
+    function renderImages(){
+      $('#mainImg').src = PRODUCT.images[0]; $('#mainImg').alt = PRODUCT.name;
+      const wrap = $('#thumbs'); wrap.innerHTML='';
+      PRODUCT.images.forEach((src,i)=>{
+        const b = document.createElement('button'); b.className = 'group relative rounded-xl overflow-hidden ring-1 ring-primary-200 hover:ring-primary-400';
+        b.innerHTML = `<img class="w-full aspect-[4/3] object-cover" src="${src}" alt="Thumb ${i+1}">`;
+        b.addEventListener('click', ()=>{ $('#mainImg').src=src; });
+        wrap.appendChild(b);
+      });
+    }
+
+    function renderSizes(){
+      const wrap = $('#sizes'); wrap.innerHTML='';
+      PRODUCT.sizes.forEach(s=>{
+        const btn = document.createElement('button');
+        btn.className = 'size-btn px-3 py-2 rounded-xl ring-1 ring-primary-200 bg-white hover:bg-primary-50 text-sm';
+        btn.textContent = `${s.label}`; btn.title = s.meta; btn.dataset.id = s.id;
+        if(s.id===state.size) btn.classList.add('bg-primary-600','text-white');
+        btn.addEventListener('click', ()=>{ state.size=s.id; updatePrice(); highlightSizes(); });
+        wrap.appendChild(btn);
+      });
+    }
+    function highlightSizes(){ $$('.size-btn').forEach(b=> b.classList.toggle('bg-primary-600', b.dataset.id===state.size) || b.classList.toggle('text-white', b.dataset.id===state.size) || b.classList.toggle('bg-white', b.dataset.id!==state.size)); }
+
+    function renderFlavors(){
+      const wrap = $('#flavors'); wrap.innerHTML='';
+      PRODUCT.flavors.forEach(f=>{
+        const btn = document.createElement('button');
+        btn.className = 'flavor-btn px-3 py-2 rounded-xl ring-1 ring-primary-200 bg-white hover:bg-primary-50 text-sm';
+        btn.textContent = f.label; btn.dataset.id = f.id;
+        if(f.id===state.flavor) btn.classList.add('bg-primary-600','text-white');
+        btn.addEventListener('click', ()=>{ state.flavor=f.id; highlightFlavors(); });
+        wrap.appendChild(btn);
+      });
+    }
+    function highlightFlavors(){ $$('.flavor-btn').forEach(b=> b.classList.toggle('bg-primary-600', b.dataset.id===state.flavor) || b.classList.toggle('text-white', b.dataset.id===state.flavor) || b.classList.toggle('bg-white', b.dataset.id!==state.flavor)); }
+
+    function updatePrice(){
+      const size = PRODUCT.sizes.find(s=>s.id===state.size);
+      let price = Math.round(PRODUCT.basePrice * size.factor);
+      if(state.vegan) price += 20000; // phụ thu
+      if(state.gf) price += 15000;
+      $('#price').textContent = fmt(price);
+      $('#oldPrice').textContent = PRODUCT.sale ? fmt(Math.round(price*1.12)) : '';
+    }
+
+    function renderTimes(){
+      // Generate time slots (09:00–20:00, mỗi 30 phút)
+      const sel = $('#time'); sel.innerHTML='';
+      for(let h=9; h<=20; h++){
+        for(let m=0; m<60; m+=30){
+          const v = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+          const opt = document.createElement('option'); opt.value=v; opt.textContent=v; sel.appendChild(opt);
+        }
+      }
+      // Default date = hôm nay
+      const today = new Date(); const yyyy=today.getFullYear(); const mm=String(today.getMonth()+1).padStart(2,'0'); const dd=String(today.getDate()).padStart(2,'0');
+      $('#date').value = `${yyyy}-${mm}-${dd}`; state.date = $('#date').value; state.time = sel.value;
+    }
+
+    function addToCart(){
+      const payload = { id: PRODUCT.id, name: PRODUCT.name, size: state.size, flavor: state.flavor, vegan: state.vegan, gf: state.gf, msg: state.msg, date: state.date, time: state.time, qty: 1 };
+      const c = store.add('cart', payload);
+      const b = $('#cartBadge'); b.textContent=c; b.classList.remove('hidden');
+      toast('Đã thêm vào giỏ: '+PRODUCT.name);
+    }
+
+    function renderRelated(){
+      const wrap = $('#related'); wrap.innerHTML='';
+      RELATED.forEach(p=>{
+        const card = document.createElement('a'); card.href='product.html'; card.className='group rounded-2xl bg-white border border-primary-100 overflow-hidden shadow-soft block';
+        card.innerHTML = `
+          <div class="relative">
+            <img class="w-full aspect-square object-cover" src="${p.img}" alt="${p.name}">
+            <span class="absolute left-3 top-3 text-[11px] font-bold bg-primary-600 text-white px-2 py-1 rounded-full">Gợi ý</span>
+          </div>
+          <div class="p-4">
+            <h3 class="font-semibold text-slate-900 line-clamp-2">${p.name}</h3>
+            <div class="mt-1 text-primary-700 font-bold">${fmt(p.price)}</div>
+          </div>`;
+        wrap.appendChild(card);
+      });
+    }
+
+    // Tabs
+    $$('.tab-btn').forEach(btn=> btn?.addEventListener('click', ()=>{
+      $$('.tab-btn').forEach(b=> b.classList.remove('bg-primary-600','text-white'));
+      btn.classList.add('bg-primary-600','text-white');
+      const id = btn.dataset.tab; $$('.tab-panel').forEach(p=> p.classList.add('hidden')); $(`#tab-${id}`).classList.remove('hidden');
+    }));
+
+    // Lightbox
+    function openLB(src){ $('#lbImg').src = src; $('#lightbox').classList.remove('hidden'); }
+    function closeLB(){ $('#lightbox').classList.add('hidden'); }
+    window.closeLB = closeLB; window.openLB = openLB;
+
+    // Init
+    window.addEventListener('DOMContentLoaded', ()=>{ init(); if(window.lucide) window.lucide.createIcons(); });
+  </script>
+</body>
+</html>
