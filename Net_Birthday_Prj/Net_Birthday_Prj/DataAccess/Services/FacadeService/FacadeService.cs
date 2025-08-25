@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
-using BusinessLogic.Services.Implements;
-using BusinessLogic.Services.Interfaces;
-using DataAccess.Repositories;
-using DataAccess.Repositories.Interfaces;
+using DataAccess.Services.Implements;
+using DataAccess.Services.Interfaces;
 using DataAccess.UnitOfWork;
 using Microsoft.Extensions.Configuration;
 using Ultitity.Email.Interface;
 
-namespace BusinessLogic.Services.FacadeService
+namespace DataAccess.Services.FacadeService
 {
     public class FacadeService : IFacadeService
     {
@@ -18,6 +16,8 @@ namespace BusinessLogic.Services.FacadeService
 
         public ICategoryService CategoryService { get; }
         public IProductService ProductService { get; }
+        public IShoppingCartService ShoppingCartService { get; }
+        public ICartItemService CartItemService { get; }
 
         public FacadeService(
             IUnitOfWork unitOfWork,
@@ -32,7 +32,8 @@ namespace BusinessLogic.Services.FacadeService
             _mapper = mapper;
             CategoryService = new CategoryService(_unitOfWork, _mapper);
             ProductService = new ProductService(_unitOfWork, _mapper);
-
+            ShoppingCartService = new ShoppingCartService(_unitOfWork, _mapper);
+            CartItemService = new CartItemService(_unitOfWork, _mapper);
         }
     }
 }

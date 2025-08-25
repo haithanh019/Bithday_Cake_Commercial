@@ -15,8 +15,12 @@ namespace DataAccess.Data
         public DbSet<Product> Products => Set<Product>();
         public DbSet<CustomCakeOption> CustomCakeOptions => Set<CustomCakeOption>();
         public DbSet<ShoppingCart> ShoppingCarts => Set<ShoppingCart>();
+        public DbSet<CartItem> CartItems => Set<CartItem>();
+
         public DbSet<Order> Orders => Set<Order>();
         public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+
+
 
         protected override void OnModelCreating(ModelBuilder b)
         {
@@ -62,6 +66,30 @@ namespace DataAccess.Data
                  .WithMany(u => u.ShoppingCarts)
                  .HasForeignKey(x => x.UserId)
                  .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // ===== CartItem =====
+            b.Entity<CartItem>(e =>
+            {
+                e.HasKey(x => x.CartItemId);
+
+                e.Property(x => x.Quantity)
+                    .IsRequired()
+                    .HasDefaultValue(1);
+
+                e.Property(x => x.UnitPrice)
+                    .HasColumnType("decimal(18,2)")
+                    .IsRequired();
+
+                e.HasOne(x => x.Cart)
+                    .WithMany(c => c.Items)
+                    .HasForeignKey(x => x.CartId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                e.HasOne(x => x.Product)
+                    .WithMany() // nếu Product chưa có ICollection<CartItem>, để trống
+                    .HasForeignKey(x => x.ProductId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             // ===== Orders =====
