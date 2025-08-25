@@ -5,12 +5,16 @@ using BusinessLogic.DTOs.Categories;
 using BusinessLogic.DTOs.CustomCakeOptions;
 using BusinessLogic.DTOs.Orders;
 using BusinessLogic.DTOs.Products;
+using BusinessLogic.DTOs.Users;
+using BusinessLogic.Entities;
 using DataAccess.Data;
+using DataAccess.Helper;
 using DataAccess.Repositories;
 using DataAccess.Repositories.Interfaces;
 using DataAccess.Services.FacadeService;
 using DataAccess.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -23,7 +27,7 @@ namespace BirthdayCakeAPI
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -41,8 +45,10 @@ namespace BirthdayCakeAPI
                 modelBuilder.EntitySet<ShoppingCartDTO>("ShoppingCarts");
                 modelBuilder.EntitySet<OrderDTO>("Orders");
                 modelBuilder.EntitySet<CustomCakeOptionDTO>("CustomCakeOptions");
+                modelBuilder.EntitySet<UserDTO>("Auth");
 
 
+                
                 opt.AddRouteComponents("odata", modelBuilder.GetEdmModel())
                     .Select().Filter().OrderBy().Expand().SetMaxTop(100).Count().SkipToken();
             });
@@ -86,14 +92,26 @@ namespace BirthdayCakeAPI
             //Repositories
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 
 
-            //builder
-            //    .Services.AddIdentity<ApplicationUser, IdentityRole>()
-            //    .AddEntityFrameworkStores<ApplicationDbContext>()
-            //    .AddDefaultTokenProviders();
+
+            builder
+                .Services.AddIdentity<ApplicationUser, IdentityRole<int>>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
             var app = builder.Build();
+
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                await IdentitySeed.SeedRolesAndAdminAsync(services);
+            }
+
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -111,7 +129,8 @@ namespace BirthdayCakeAPI
 
             app.MapControllers();
 
-            app.Run();
+            await app.RunAsync();
         }
     }
+
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessLogic.DTOs.CustomCakeOptions;
 using BusinessLogic.Entities;
+using BusinessLogic.Enums;
 using DataAccess.Services.Interfaces;
 using DataAccess.UnitOfWork;
 using System;
@@ -14,8 +15,6 @@ namespace DataAccess.Services
 {
     public class CustomCakeOptionService : ICustomCakeOptionService
     {
-        private static readonly HashSet<string> AllowedTypes =
-            new(new[] { "Size", "Flavor", "Decoration" }, StringComparer.OrdinalIgnoreCase);
 
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
@@ -30,11 +29,20 @@ namespace DataAccess.Services
         {
             if (!string.IsNullOrWhiteSpace(optionType))
             {
+                if (!TryParseOptionType(optionType, out var typeEnum))
+                {
+                    throw new CustomValidationException(new Dictionary<string, string[]>
+            {
+                { nameof(optionType), new[] { $"Invalid optionType. Allowed: {AllowedOptionTypesText()}." } }
+            });
+                }
+
                 var filtered = await _uow.CustomCakeOptionRepository.GetRangeAsync(
-                    x => x.OptionType.ToLower() == optionType.ToLower(),
+                    x => x.OptionType == typeEnum,
                     sortBy: nameof(CustomCakeOption.OptionId),
                     isAscending: true
                 );
+
                 return _mapper.Map<IEnumerable<CustomCakeOptionDTO>>(filtered);
             }
 
@@ -44,6 +52,7 @@ namespace DataAccess.Services
                 pageNumber: 1,
                 pageSize: 1000
             );
+
             return _mapper.Map<IEnumerable<CustomCakeOptionDTO>>(all);
         }
 
@@ -57,28 +66,38 @@ namespace DataAccess.Services
         {
             var errors = new Dictionary<string, string[]>();
 
-            if (string.IsNullOrWhiteSpace(dto.OptionType) || !AllowedTypes.Contains(dto.OptionType))
-                errors[nameof(dto.OptionType)] = new[] { "OptionType must be one of: Size, Flavor, Decoration." };
+            // Validate OptionType
+            if (!TryParseOptionType(dto.OptionType, out var typeEnum))
+                errors[nameof(dto.OptionType)] = new[] { $"OptionType must be one of: {AllowedOptionTypesText()}." };
 
+            // Validate Name
             if (string.IsNullOrWhiteSpace(dto.Name))
                 errors[nameof(dto.Name)] = new[] { "Name is required." };
 
+            // Validate ExtraPrice
             if (dto.ExtraPrice < 0m)
                 errors[nameof(dto.ExtraPrice)] = new[] { "ExtraPrice cannot be negative." };
 
             if (errors.Any()) throw new CustomValidationException(errors);
 
-            // Unique (OptionType, Name)
+            // Unique (OptionType, Name) – so sánh enum trực tiếp, Name case-insensitive
             var dup = await _uow.CustomCakeOptionRepository.GetAsync(
-                x => x.OptionType.ToLower() == dto.OptionType.ToLower() && x.Name.ToLower() == dto.Name.ToLower()
+                x => x.OptionType == typeEnum && x.Name.ToLower() == dto.Name.Trim().ToLower()
             );
             if (dup != null)
                 throw new CustomValidationException(new Dictionary<string, string[]>
-                {
-                    { nameof(dto.Name), new[] { "An option with the same type and name already exists." } }
-                });
+        {
+            { nameof(dto.Name), new[] { "An option with the same type and name already exists." } }
+        });
 
-            var entity = _mapper.Map<CustomCakeOption>(dto);
+            // Map DTO -> Entity (vì DTO có OptionType string, set enum thủ công)
+            var entity = new CustomCakeOption
+            {
+                Name = dto.Name.Trim(),
+                ExtraPrice = dto.ExtraPrice,
+                OptionType = typeEnum
+            };
+
             await _uow.CustomCakeOptionRepository.AddAsync(entity);
             await _uow.SaveAsync();
 
@@ -90,41 +109,40 @@ namespace DataAccess.Services
             var entity = await _uow.CustomCakeOptionRepository.GetAsync(x => x.OptionId == dto.OptionId);
             if (entity == null)
                 throw new CustomValidationException(new Dictionary<string, string[]>
-                {
-                    { nameof(dto.OptionId), new[] { "Option not found." } }
-                });
-
-            if (string.IsNullOrWhiteSpace(dto.OptionType) || !AllowedTypes.Contains(dto.OptionType))
-                throw new CustomValidationException(new Dictionary<string, string[]>
-                {
-                    { nameof(dto.OptionType), new[] { "OptionType must be one of: Size, Flavor, Decoration." } }
-                });
+        {
+            { nameof(dto.OptionId), new[] { "Option not found." } }
+        });
 
             if (string.IsNullOrWhiteSpace(dto.Name))
                 throw new CustomValidationException(new Dictionary<string, string[]>
-                {
-                    { nameof(dto.Name), new[] { "Name is required." } }
-                });
+        {
+            { nameof(dto.Name), new[] { "Name is required." } }
+        });
 
             if (dto.ExtraPrice < 0m)
                 throw new CustomValidationException(new Dictionary<string, string[]>
-                {
-                    { nameof(dto.ExtraPrice), new[] { "ExtraPrice cannot be negative." } }
-                });
+        {
+            { nameof(dto.ExtraPrice), new[] { "ExtraPrice cannot be negative." } }
+        });
 
-            // Check duplicate (excluding self)
+            // Check duplicate
+            var normalizedName = dto.Name.Trim().ToLower();
             var dup = await _uow.CustomCakeOptionRepository.GetAsync(
-                x => x.OptionType.ToLower() == dto.OptionType.ToLower()
-                  && x.Name.ToLower() == dto.Name.ToLower()
+                x => x.OptionType == dto.OptionType
+                  && x.Name.ToLower() == normalizedName
                   && x.OptionId != dto.OptionId
             );
             if (dup != null)
                 throw new CustomValidationException(new Dictionary<string, string[]>
-                {
-                    { nameof(dto.Name), new[] { "An option with the same type and name already exists." } }
-                });
+        {
+            { nameof(dto.Name), new[] { "An option with the same type and name already exists." } }
+        });
 
-            _mapper.Map(dto, entity);
+            // Update entity
+            entity.Name = dto.Name.Trim();
+            entity.ExtraPrice = dto.ExtraPrice;
+            entity.OptionType = dto.OptionType;
+
             await _uow.SaveAsync();
         }
 
@@ -136,5 +154,16 @@ namespace DataAccess.Services
             _uow.CustomCakeOptionRepository.Remove(entity);
             await _uow.SaveAsync();
         }
+
+        private static bool TryParseOptionType(string? raw, out CustomOptionType value)
+        {
+            return Enum.TryParse<CustomOptionType>(raw?.Trim(), ignoreCase: true, out value);
+        }
+
+        private static string AllowedOptionTypesText()
+        {
+            return string.Join(", ", Enum.GetNames(typeof(CustomOptionType)));
+        }
+
     }
 }

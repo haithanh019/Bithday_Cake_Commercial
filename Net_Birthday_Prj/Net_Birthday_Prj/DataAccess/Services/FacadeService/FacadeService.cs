@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using DataAccess.Repositories.Interfaces;
 using DataAccess.Services.Implements;
 using DataAccess.Services.Interfaces;
 using DataAccess.UnitOfWork;
 using Microsoft.Extensions.Configuration;
 using Ultitity.Email.Interface;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace DataAccess.Services.FacadeService
 {
@@ -20,12 +22,14 @@ namespace DataAccess.Services.FacadeService
         public ICartItemService CartItemService { get; }      
         public IOrderService OrderService { get; }
         public ICustomCakeOptionService CustomCakeOptionService { get; }
+        public IAuthService AuthService { get; }
 
         public FacadeService(
             IUnitOfWork unitOfWork,
             IConfiguration configuration,
             IEmailQueue emailQueue,
-            IMapper mapper
+            IMapper mapper,
+            IUserRepository userRepo
         )
         {
             _unitOfWork = unitOfWork;
@@ -38,6 +42,8 @@ namespace DataAccess.Services.FacadeService
             CartItemService = new CartItemService(_unitOfWork, _mapper);
             OrderService = new OrderService(_unitOfWork, _mapper);
             CustomCakeOptionService = new CustomCakeOptionService(_unitOfWork, _mapper);
+            AuthService = new AuthService(userRepo, _configuration);
+
         }
     }
 }

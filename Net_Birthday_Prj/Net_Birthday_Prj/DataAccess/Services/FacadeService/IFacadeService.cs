@@ -10,5 +10,6 @@ namespace DataAccess.Services.FacadeService
         ICartItemService CartItemService { get; }
         IOrderService OrderService { get; }
         ICustomCakeOptionService CustomCakeOptionService { get; }
+        IAuthService AuthService { get; }
     }
 }
