@@ -19,6 +19,7 @@ namespace DataAccess.Services.FacadeService
         public IShoppingCartService ShoppingCartService { get; }
         public ICartItemService CartItemService { get; }      
         public IOrderService OrderService { get; }
+        public ICustomCakeOptionService CustomCakeOptionService { get; }
 
         public FacadeService(
             IUnitOfWork unitOfWork,
@@ -36,6 +37,7 @@ namespace DataAccess.Services.FacadeService
             ShoppingCartService = new ShoppingCartService(_unitOfWork, _mapper);
             CartItemService = new CartItemService(_unitOfWork, _mapper);
             OrderService = new OrderService(_unitOfWork, _mapper);
+            CustomCakeOptionService = new CustomCakeOptionService(_unitOfWork, _mapper);
         }
     }
 }

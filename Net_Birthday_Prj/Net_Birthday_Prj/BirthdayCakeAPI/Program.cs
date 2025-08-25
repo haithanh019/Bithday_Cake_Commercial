@@ -2,6 +2,7 @@ using BirthdayCakeAPI.Mapping;
 using BusinessLogic.DTOs.Carts;
 using BusinessLogic.DTOs.Carts.CartItems;
 using BusinessLogic.DTOs.Categories;
+using BusinessLogic.DTOs.CustomCakeOptions;
 using BusinessLogic.DTOs.Orders;
 using BusinessLogic.DTOs.Products;
 using DataAccess.Data;
@@ -39,6 +40,8 @@ namespace BirthdayCakeAPI
                 modelBuilder.EntitySet<CartItemDTO>("CartItems");
                 modelBuilder.EntitySet<ShoppingCartDTO>("ShoppingCarts");
                 modelBuilder.EntitySet<OrderDTO>("Orders");
+                modelBuilder.EntitySet<CustomCakeOptionDTO>("CustomCakeOptions");
+
 
                 opt.AddRouteComponents("odata", modelBuilder.GetEdmModel())
                     .Select().Filter().OrderBy().Expand().SetMaxTop(100).Count().SkipToken();

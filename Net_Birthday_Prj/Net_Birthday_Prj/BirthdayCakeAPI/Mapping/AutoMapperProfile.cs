@@ -2,6 +2,7 @@
 using BusinessLogic.DTOs.Carts;
 using BusinessLogic.DTOs.Carts.CartItems;
 using BusinessLogic.DTOs.Categories;
+using BusinessLogic.DTOs.CustomCakeOptions;
 using BusinessLogic.DTOs.Orders;
 using BusinessLogic.DTOs.Orders.OrderItemDTOs;
 using BusinessLogic.DTOs.Products;
@@ -54,6 +55,11 @@ namespace BirthdayCakeAPI.Mapping
 
             // Order Item
             CreateMap<OrderItem, OrderItemDTO>().ReverseMap();
+
+            // CustomCakeOption
+            CreateMap<CustomCakeOption, CustomCakeOptionDTO>().ReverseMap();
+            CreateMap<CreateCustomCakeOptionDTO, CustomCakeOption>();
+            CreateMap<UpdateCustomCakeOptionDTO, CustomCakeOption>();
         }
     }
 }
