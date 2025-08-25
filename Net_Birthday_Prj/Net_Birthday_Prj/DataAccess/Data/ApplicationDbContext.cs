@@ -51,7 +51,6 @@ namespace DataAccess.Data
             b.Entity<CustomCakeOption>(e =>
             {
                 e.HasKey(x => x.OptionId);
-                e.Property(x => x.OptionType).IsRequired().HasMaxLength(50);
                 e.Property(x => x.Name).IsRequired().HasMaxLength(100);
                 e.Property(x => x.ExtraPrice).HasColumnType("decimal(10,2)");
             });
@@ -96,7 +95,6 @@ namespace DataAccess.Data
             {
                 e.HasKey(x => x.OrderId);
                 e.Property(x => x.TotalAmount).HasColumnType("decimal(10,2)");
-                e.Property(x => x.Status).HasMaxLength(50).HasDefaultValue("Pending");
                 e.Property(x => x.DeliveryAddress).HasMaxLength(250);
                 e.Property(x => x.CreatedAt).HasDefaultValueSql("GETDATE()");
 
@@ -137,8 +135,7 @@ namespace DataAccess.Data
             b.Entity<Product>().HasData(
                 new Product { ProductId = 1, CategoryId = 1, Name = "Bánh Kem Socola", Description = "Bánh kem socola phủ kem tươi", Price = 250000m, ImageUrl = "/images/choco_cake.jpg", IsAvailable = true },
                 new Product { ProductId = 2, CategoryId = 1, Name = "Bánh Kem Dâu", Description = "Bánh kem vani phủ dâu tươi", Price = 270000m, ImageUrl = "/images/strawberry_cake.jpg", IsAvailable = true }
-            // Dòng (1, 3, 1, 30000) trong SQL bạn đưa bị sai cột -> bỏ hoặc sửa thành:
-            // new Product { ProductId = 3, CategoryId = 2, Name = "Cupcake Vani", Description = "Cupcake vị vani", Price = 30000m, ImageUrl = "/images/vanilla_cupcake.jpg", IsAvailable = true }
+
             );
         }
     }

@@ -56,7 +56,7 @@ namespace DataAccess.Services
                 UserId = cart.UserId,
                 CartId = cart.CartId,
                 DeliveryAddress = dto.DeliveryAddress,
-                Status = OrderStatus.Pending.ToString(),   // dùng enum → string
+                Status = OrderStatus.Pending,   // dùng enum → string
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -95,27 +95,47 @@ namespace DataAccess.Services
             var entity = await _uow.OrderRepository.GetAsync(o => o.OrderId == dto.OrderId);
             if (entity == null)
                 throw new CustomValidationException(new Dictionary<string, string[]>
-                {
-                    { nameof(dto.OrderId), new[] { "Order not found." } }
-                });
+        {
+            { nameof(dto.OrderId), new[] { "Order not found." } }
+        });
 
-            entity.Status = dto.Status;
+            // Parse string -> enum (case-insensitive)
+            if (!Enum.TryParse<OrderStatus>(dto.Status, true, out var newStatus))
+            {
+                throw new CustomValidationException(new Dictionary<string, string[]>
+        {
+            { nameof(dto.Status), new[] { $"Invalid status: '{dto.Status}'. Allowed: {string.Join(", ", Enum.GetNames(typeof(OrderStatus)))}." } }
+        });
+            }
+
+            // (Tuỳ chính sách) Không cho đổi từ Confirmed về trạng thái khác
+            if (entity.Status == OrderStatus.Confirmed && newStatus != OrderStatus.Confirmed)
+            {
+                throw new CustomValidationException(new Dictionary<string, string[]>
+        {
+            { nameof(dto.Status), new[] { "Cannot change status of a confirmed order." } }
+        });
+            }
+
+            entity.Status = newStatus;
             await _uow.SaveAsync();
         }
 
         public async Task DeleteAsync(int orderId)
         {
+            // Include Items để EF cascade xoá
             var entity = await _uow.OrderRepository.GetAsync(o => o.OrderId == orderId, "Items");
             if (entity == null) return;
 
-            // tuỳ chính sách: nếu đã Paid thì không cho delete
-            if (string.Equals(entity.Status, OrderStatus.Confirmed.ToString(), StringComparison.OrdinalIgnoreCase))
+            // Tuỳ chính sách: nếu đã Confirmed thì không cho delete
+            if (entity.Status == OrderStatus.Confirmed)
+            {
                 throw new CustomValidationException(new Dictionary<string, string[]>
-                {
-                    { "Status", new[] { "Cannot delete a confirmed order." } }
-                });
+        {
+            { "Status", new[] { "Cannot delete a confirmed order." } }
+        });
+            }
 
-            // EF sẽ cascade xoá Items
             _uow.OrderRepository.Remove(entity);
             await _uow.SaveAsync();
         }

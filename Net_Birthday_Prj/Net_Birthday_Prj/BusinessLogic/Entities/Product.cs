@@ -12,5 +12,4 @@
 
         public Category Category { get; set; } = null!;
     }
-
 }
