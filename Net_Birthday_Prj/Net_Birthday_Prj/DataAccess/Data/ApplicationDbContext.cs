@@ -16,7 +16,6 @@ namespace DataAccess.Data
         public DbSet<CustomCakeOption> CustomCakeOptions => Set<CustomCakeOption>();
         public DbSet<ShoppingCart> ShoppingCarts => Set<ShoppingCart>();
         public DbSet<CartItem> CartItems => Set<CartItem>();
-
         public DbSet<Order> Orders => Set<Order>();
         public DbSet<OrderItem> OrderItems => Set<OrderItem>();
 
@@ -116,7 +115,7 @@ namespace DataAccess.Data
             b.Entity<OrderItem>(e =>
             {
                 e.HasKey(x => x.OrderItemId);
-                e.Property(x => x.Price).HasColumnType("decimal(10,2)");
+                e.Property(x => x.Price).HasColumnType("decimal(10,2)").IsRequired();
                 e.HasOne(x => x.Order)
                  .WithMany(o => o.Items)
                  .HasForeignKey(x => x.OrderId)

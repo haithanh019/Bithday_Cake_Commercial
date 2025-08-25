@@ -1,4 +1,4 @@
-﻿using BusinessLogic.DTOs.Carts;
+﻿using BusinessLogic.DTOs.Carts.CartItems;
 namespace DataAccess.Services.Interfaces
 {
     public interface ICartItemService

@@ -1,4 +1,4 @@
-﻿namespace BusinessLogic.DTOs.Carts
+﻿namespace BusinessLogic.DTOs.Carts.CartItems
 {
     public class UpdateCartItemDTO : CartItemDTO
     {

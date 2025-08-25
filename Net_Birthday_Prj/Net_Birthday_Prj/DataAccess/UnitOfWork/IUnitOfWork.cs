@@ -1,4 +1,5 @@
 ﻿using DataAccess.Repositories.Interfaces;
+using DataAccess.Repositories.Interfaces.DataAccess.Repositories.Interfaces;
 
 namespace DataAccess.UnitOfWork
 {
@@ -8,6 +9,8 @@ namespace DataAccess.UnitOfWork
         IProductRepository ProductRepository { get; }
         IShoppingCartRepository ShoppingCartRepository { get; }
         ICartItemRepository CartItemRepository { get; }
+        IOrderRepository OrderRepository { get; }
+        IOrderItemRepository OrderItemRepository { get; }
         Task SaveAsync();
     }
 }

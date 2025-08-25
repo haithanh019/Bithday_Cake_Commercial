@@ -1,6 +1,5 @@
 ﻿using BusinessLogic.DTOs.Categories;
-using BusinessLogic.Services.FacadeService;
-using BusinessLogic.Services.Interfaces;
+using DataAccess.Services.FacadeService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Deltas;

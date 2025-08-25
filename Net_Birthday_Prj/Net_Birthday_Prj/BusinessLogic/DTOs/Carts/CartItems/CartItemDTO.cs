@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BusinessLogic.DTOs.Carts
+namespace BusinessLogic.DTOs.Carts.CartItems
 {
     public class CartItemDTO
     {

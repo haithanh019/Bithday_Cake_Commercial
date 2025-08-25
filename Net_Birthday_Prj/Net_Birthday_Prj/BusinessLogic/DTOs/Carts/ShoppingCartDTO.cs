@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BusinessLogic.DTOs.Carts.CartItems;
+using System.ComponentModel.DataAnnotations;
 
 namespace BusinessLogic.DTOs.Carts
 {
