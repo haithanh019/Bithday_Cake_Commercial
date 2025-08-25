@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessLogic.DTOs.Carts;
+using BusinessLogic.DTOs.Carts.CartItems;
 using BusinessLogic.Entities;
 using DataAccess.Services.Interfaces;
 using DataAccess.UnitOfWork;

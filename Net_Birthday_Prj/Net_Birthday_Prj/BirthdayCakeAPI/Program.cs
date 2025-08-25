@@ -1,16 +1,15 @@
 using BirthdayCakeAPI.Mapping;
+using BusinessLogic.DTOs.Carts;
+using BusinessLogic.DTOs.Carts.CartItems;
 using BusinessLogic.DTOs.Categories;
+using BusinessLogic.DTOs.Orders;
 using BusinessLogic.DTOs.Products;
-using BusinessLogic.Entities;
-using BusinessLogic.Services.FacadeService;
-using BusinessLogic.Services.Implements;
-using BusinessLogic.Services.Interfaces;
 using DataAccess.Data;
 using DataAccess.Repositories;
 using DataAccess.Repositories.Interfaces;
+using DataAccess.Services.FacadeService;
 using DataAccess.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -37,6 +36,10 @@ namespace BirthdayCakeAPI
 
                 modelBuilder.EntitySet<CategoryDTO>("Categories");
                 modelBuilder.EntitySet<ProductDTO>("Products");
+                modelBuilder.EntitySet<CartItemDTO>("CartItems");
+                modelBuilder.EntitySet<ShoppingCartDTO>("ShoppingCarts");
+                modelBuilder.EntitySet<OrderDTO>("Orders");
+
                 opt.AddRouteComponents("odata", modelBuilder.GetEdmModel())
                     .Select().Filter().OrderBy().Expand().SetMaxTop(100).Count().SkipToken();
             });

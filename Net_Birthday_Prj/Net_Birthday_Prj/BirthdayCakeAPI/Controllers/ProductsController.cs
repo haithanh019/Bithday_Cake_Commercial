@@ -1,5 +1,5 @@
 ﻿using BusinessLogic.DTOs.Products;
-using BusinessLogic.Services.FacadeService;
+using DataAccess.Services.FacadeService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Deltas;
 using Microsoft.AspNetCore.OData.Formatter;

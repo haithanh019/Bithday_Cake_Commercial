@@ -1,7 +1,11 @@
-﻿namespace BusinessLogic.Entities
+﻿using BusinessLogic.DTOs.Orders.OrderItemDTOs;
+using System.ComponentModel.DataAnnotations;
+
+namespace BusinessLogic.DTOs.Orders
 {
-    public class Order
+    public class OrderDTO
     {
+        [Key]
         public int OrderId { get; set; }
         public int UserId { get; set; }
         public int CartId { get; set; }
@@ -9,12 +13,7 @@
         public string Status { get; set; } = "Pending";
         public string? DeliveryAddress { get; set; }
         public DateTime CreatedAt { get; set; }
-
-        public ApplicationUser User { get; set; } = null!;
-        public ShoppingCart Cart { get; set; } = null!;
-        public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
-
-
+        public IEnumerable<OrderItemDTO> Items { get; set; } = new List<OrderItemDTO>();
     }
-
 }
+

@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using BusinessLogic.DTOs.Carts;
+using BusinessLogic.DTOs.Carts.CartItems;
 using BusinessLogic.DTOs.Categories;
+using BusinessLogic.DTOs.Orders;
+using BusinessLogic.DTOs.Orders.OrderItemDTOs;
 using BusinessLogic.DTOs.Products;
 using BusinessLogic.DTOs.Users;
 using BusinessLogic.Entities;
@@ -42,6 +45,15 @@ namespace BirthdayCakeAPI.Mapping
             CreateMap<CreateCartItemDTO, CartItem>()
                 .ForMember(d => d.UnitPrice, o => o.Ignore()); // set theo Product.Price
             CreateMap<UpdateCartItemDTO, CartItem>();
+
+            // Order
+            CreateMap<Order, OrderDTO>()
+    .ForMember(d => d.Items, o => o.MapFrom(s => s.Items));
+            CreateMap<CreateOrderFromCartDTO, Order>();       // chỉ map DeliveryAddress, CartId
+            CreateMap<UpdateOrderStatusDTO, Order>();
+
+            // Order Item
+            CreateMap<OrderItem, OrderItemDTO>().ReverseMap();
         }
     }
 }

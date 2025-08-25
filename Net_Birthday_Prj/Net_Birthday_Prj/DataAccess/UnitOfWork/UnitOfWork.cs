@@ -1,6 +1,7 @@
 ﻿using DataAccess.Data;
 using DataAccess.Repositories;
 using DataAccess.Repositories.Interfaces;
+using DataAccess.Repositories.Interfaces.DataAccess.Repositories.Interfaces;
 using Microsoft.Extensions.Configuration;
 namespace DataAccess.UnitOfWork
 {
@@ -12,6 +13,8 @@ namespace DataAccess.UnitOfWork
         public IProductRepository ProductRepository { get; }
         public IShoppingCartRepository ShoppingCartRepository { get; }
         public ICartItemRepository CartItemRepository { get; }
+        public IOrderRepository OrderRepository { get; }
+        public IOrderItemRepository OrderItemRepository { get; }
 
         public UnitOfWork(ApplicationDbContext db, IConfiguration configuration)
         {
@@ -21,6 +24,8 @@ namespace DataAccess.UnitOfWork
             ProductRepository = new ProductRepository(_db);
             ShoppingCartRepository = new ShoppingCartRepository(_db);
             CartItemRepository = new CartItemRepository(_db);
+            OrderRepository = new OrderRepository(_db);
+            OrderItemRepository = new OrderItemRepository(_db);
         }
 
         public async Task SaveAsync()
