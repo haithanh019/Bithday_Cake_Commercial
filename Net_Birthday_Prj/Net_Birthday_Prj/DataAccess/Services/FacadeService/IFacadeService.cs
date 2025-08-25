@@ -9,5 +9,6 @@ namespace DataAccess.Services.FacadeService
         IShoppingCartService ShoppingCartService { get; }
         ICartItemService CartItemService { get; }
         IOrderService OrderService { get; }
+        ICustomCakeOptionService CustomCakeOptionService { get; }
     }
 }

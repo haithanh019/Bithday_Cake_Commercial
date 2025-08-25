@@ -11,6 +11,7 @@ namespace DataAccess.UnitOfWork
         ICartItemRepository CartItemRepository { get; }
         IOrderRepository OrderRepository { get; }
         IOrderItemRepository OrderItemRepository { get; }
+        ICustomCakeOptionRepository CustomCakeOptionRepository { get; }
         Task SaveAsync();
     }
 }

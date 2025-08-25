@@ -15,6 +15,7 @@ namespace DataAccess.UnitOfWork
         public ICartItemRepository CartItemRepository { get; }
         public IOrderRepository OrderRepository { get; }
         public IOrderItemRepository OrderItemRepository { get; }
+        public ICustomCakeOptionRepository CustomCakeOptionRepository { get; }
 
         public UnitOfWork(ApplicationDbContext db, IConfiguration configuration)
         {
@@ -26,6 +27,7 @@ namespace DataAccess.UnitOfWork
             CartItemRepository = new CartItemRepository(_db);
             OrderRepository = new OrderRepository(_db);
             OrderItemRepository = new OrderItemRepository(_db);
+            CustomCakeOptionRepository = new CustomCakeOptionRepository(_db);
         }
 
         public async Task SaveAsync()
