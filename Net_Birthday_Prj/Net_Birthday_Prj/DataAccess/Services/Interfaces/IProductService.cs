@@ -1,6 +1,6 @@
 ﻿using BusinessLogic.DTOs.Products;
 
-namespace BusinessLogic.Services.Interfaces
+namespace DataAccess.Services.Interfaces
 {
     public interface IProductService
     {

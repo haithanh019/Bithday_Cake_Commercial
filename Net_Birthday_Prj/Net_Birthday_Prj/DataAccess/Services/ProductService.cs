@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using BusinessLogic.DTOs.Products;
 using BusinessLogic.Entities;
-using BusinessLogic.Services.Interfaces;
+using DataAccess.Services.Interfaces;
 using DataAccess.UnitOfWork;
 using Ultitity.Exceptions;
 
-namespace BusinessLogic.Services.Implements
+namespace DataAccess.Services.Implements
 {
     public class ProductService : IProductService
     {

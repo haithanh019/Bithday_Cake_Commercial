@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessLogic.DTOs.Carts;
 using BusinessLogic.DTOs.Categories;
 using BusinessLogic.DTOs.Products;
 using BusinessLogic.DTOs.Users;
@@ -10,6 +11,13 @@ namespace BirthdayCakeAPI.Mapping
     {
         public AutoMapperProfile()
         {
+            // User → UserDTO (để trả trong LoginResponse)
+            CreateMap<ApplicationUser, UserDTO>()
+                .ForMember(d => d.Id, m => m.MapFrom(s => s.Id))
+                .ForMember(d => d.Email, m => m.MapFrom(s => s.Email))
+                .ForMember(d => d.FullName, m => m.MapFrom(s => s.FullName))
+                .ForMember(d => d.Roles, m => m.Ignore()); // fill ở controller/service
+
             // Category
             CreateMap<Category, CategoryDTO>().ReverseMap();
             CreateMap<CreateCategoryDTO, Category>();
@@ -22,12 +30,18 @@ namespace BirthdayCakeAPI.Mapping
                 .ForMember(d => d.ProductId, o => o.Ignore()); // Id do DB cấp
             CreateMap<UpdateProductDTO, Product>();
 
-            // User → UserDTO (để trả trong LoginResponse)
-            CreateMap<ApplicationUser, UserDTO>()
-                .ForMember(d => d.Id, m => m.MapFrom(s => s.Id))
-                .ForMember(d => d.Email, m => m.MapFrom(s => s.Email))
-                .ForMember(d => d.FullName, m => m.MapFrom(s => s.FullName))
-                .ForMember(d => d.Roles, m => m.Ignore()); // fill ở controller/service
+            // ShoppingCart
+            CreateMap<ShoppingCart, ShoppingCartDTO>()
+                .ForMember(d => d.Items, o => o.MapFrom(s => s.Items));
+            CreateMap<CreateShoppingCartDTO, ShoppingCart>();
+            CreateMap<UpdateShoppingCartDTO, ShoppingCart>();
+
+            // CartItem
+            CreateMap<CartItem, CartItemDTO>()
+                .ForMember(d => d.ProductName, o => o.MapFrom(s => s.Product.Name));
+            CreateMap<CreateCartItemDTO, CartItem>()
+                .ForMember(d => d.UnitPrice, o => o.Ignore()); // set theo Product.Price
+            CreateMap<UpdateCartItemDTO, CartItem>();
         }
     }
 }

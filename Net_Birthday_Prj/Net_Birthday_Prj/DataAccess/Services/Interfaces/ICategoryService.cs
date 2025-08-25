@@ -1,5 +1,5 @@
 ﻿using BusinessLogic.DTOs.Categories;
-namespace BusinessLogic.Services.Interfaces
+namespace DataAccess.Services.Interfaces
 {
     public interface ICategoryService
     {

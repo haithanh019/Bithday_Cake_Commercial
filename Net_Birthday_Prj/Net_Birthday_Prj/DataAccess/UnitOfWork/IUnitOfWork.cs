@@ -6,6 +6,8 @@ namespace DataAccess.UnitOfWork
     {
         ICategoryRepository CategoryRepository { get; }
         IProductRepository ProductRepository { get; }
+        IShoppingCartRepository ShoppingCartRepository { get; }
+        ICartItemRepository CartItemRepository { get; }
         Task SaveAsync();
     }
 }
